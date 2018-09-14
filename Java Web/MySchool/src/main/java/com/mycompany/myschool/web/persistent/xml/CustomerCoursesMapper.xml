@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerCoursesMapper">
+
+	<resultMap id="customer_cour" type="com.mycompany.myschool.web.entity.customer.CustomerCoursesEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="curs_ord" column="curs_ord" jdbcType="TINYINT" />
+		<id property="curs_title" column="curs_title" jdbcType="VARCHAR" />
+		<id property="curs_contents1" column="curs_contents1" jdbcType="VARCHAR" />
+		<id property="curs_contents2" column="curs_contents2" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		sb_id,
+		curs_ord,
+		curs_title,
+		curs_contents1,
+		curs_contents2,
+		upd_date
+	</sql>
+
+	<select id="selectByBranchId" parameterType="String" resultMap="customer_cour">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_COURSES_TX
+		WHERE 
+			SB_ID = #{sb_id}
+		ORDER BY CURS_ORD ASC
+	</select>
+	
+	<select id="selectOne" parameterType="Integer" resultMap="customer_cour">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_COURSES_TX
+		WHERE 
+			IDX = #{idx}
+	</select>
+
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerCoursesEntity">
+		INSERT INTO DS_SCHOOL_COURSES_TX 
+	    ( sb_id, curs_ord, curs_title, curs_contents1, curs_contents2, upd_date )
+	    VALUES
+	    ( #{sb_id, jdbcType=VARCHAR},
+	    	#{curs_ord, jdbcType=INTEGER},
+	    	#{curs_title, jdbcType=VARCHAR},
+	    	#{curs_contents1, jdbcType=VARCHAR},
+	    	#{curs_contents2, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerCoursesEntity">
+		UPDATE DS_SCHOOL_COURSES_TX SET 
+	    	curs_ord=#{curs_ord, jdbcType=VARCHAR},
+	    	curs_title=#{curs_title, jdbcType=VARCHAR},
+	    	curs_contents1=#{curs_contents1, jdbcType=VARCHAR},
+	    	curs_contents2=#{curs_contents2, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			SB_ID=#{sb_id, jdbcType=VARCHAR}
+	</update>
+
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_COURSES_TX 
+		WHERE 
+			SB_ID=#{sb_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.customer.CustomerCoursesEntity">
+		DELETE FROM DS_SCHOOL_COURSES_TX 
+		WHERE 
+			1 = 1
+			<if test="sb_id != null and sb_id != ''">
+				AND SB_ID = #{sb_id}
+			</if>
+	</delete>
+</mapper>

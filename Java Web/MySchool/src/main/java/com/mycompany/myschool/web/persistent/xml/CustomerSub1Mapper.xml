@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerSub1Mapper">
+
+	<resultMap id="school_detail" type="com.mycompany.myschool.web.entity.customer.CustomerSub1Entity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="features" column="features" jdbcType="VARCHAR" />
+		<id property="courses" column="courses" jdbcType="VARCHAR" />
+		<id property="fee" column="fee" jdbcType="VARCHAR" />
+		<id property="financial" column="financial" jdbcType="VARCHAR" />
+		<id property="selection" column="selection" jdbcType="VARCHAR" />
+		<id property="access" column="access" jdbcType="VARCHAR" />
+		<id property="map" column="map" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_id" column="upd_id" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		school_id,
+		features,
+		courses,
+		fee,
+		financial,
+		selection,
+		access,
+		map,
+		ins_date,
+		upd_date,
+		upd_id
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub1Entity" resultMap="school_detail">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_SUB1_TX
+		WHERE 
+			1 = 1
+			<if test="features != null and features != ''">
+				AND features = #{features}
+			</if>
+			<if test="courses != null and courses != ''">
+				AND courses = #{courses}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub1Entity" resultMap="school_detail">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_SUB1_TX
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectBySchoolId" parameterType="String" resultMap="school_detail">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_SUB1_TX
+		WHERE 
+			school_id = #{school_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub1Entity">
+	    INSERT INTO DS_SCHOOL_SUB1_TX 
+	    ( school_id, features, courses, fee, financial, selection, access, map, ins_date )
+	    VALUES
+	    ( #{school_id, jdbcType=VARCHAR},
+	    	#{features, jdbcType=VARCHAR},
+	    	#{courses, jdbcType=VARCHAR},
+	    	#{fee, jdbcType=VARCHAR},
+	    	#{financial, jdbcType=VARCHAR},
+	    	#{selection, jdbcType=VARCHAR},
+	    	#{access, jdbcType=VARCHAR},
+	    	#{map, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub1Entity">
+		UPDATE DS_SCHOOL_SUB1_TX SET 
+			features=#{features, jdbcType=VARCHAR},
+	    	courses=#{courses, jdbcType=VARCHAR},
+	    	fee=#{fee, jdbcType=VARCHAR},
+	    	financial=#{financial, jdbcType=VARCHAR},
+	    	selection=#{selection, jdbcType=VARCHAR},
+	    	access=#{access, jdbcType=VARCHAR},
+	    	map=#{map, jdbcType=VARCHAR},
+	    	upd_id=#{upd_id, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_SUB1_TX 
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub1Entity">
+		DELETE FROM DS_SCHOOL_SUB1_TX 
+		WHERE 
+			1 = 1
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+	</delete>
+</mapper>

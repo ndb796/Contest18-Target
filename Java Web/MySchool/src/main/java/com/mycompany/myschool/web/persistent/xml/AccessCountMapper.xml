@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.base.AccessCountMapper">
+
+	<resultMap id="accesscnt" type="com.mycompany.myschool.web.entity.base.AccessCountEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sch_cnt" column="sch_cnt" jdbcType="BIGINT" />
+		<id property="std_cnt" column="std_cnt" jdbcType="BIGINT" />
+		<id property="access_cnt" column="access_cnt" jdbcType="BIGINT" />
+		<id property="access_date" column="access_date" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		sch_cnt,
+		std_cnt,
+		access_date
+	</sql>
+	
+	<select id="select" parameterType="hashmap" resultMap="accesscnt">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_ACCESS_TX
+		WHERE 
+			1 = 1
+			<if test="startD != null and startD != ''">
+				AND ACCESS_DATE &gt;= #{startD}
+			</if>
+			<if test="endD != null and endD != ''">
+				AND ACCESS_DATE &lt;= #{endD}
+			</if>
+		ORDER BY ACCESS_DATE ASC
+		LIMIT 7
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultType="com.mycompany.myschool.web.entity.base.AccessCountEntity">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_ACCESS_TX
+		WHERE 
+			ACCESS_DATE=#{access_date}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.base.AccessCountEntity">
+	    INSERT INTO DS_ACCESS_TX 
+	    ( sch_cnt, std_cnt, access_date )
+	    VALUES
+	    ( #{sch_cnt, jdbcType=INTEGER},
+	    	#{std_cnt, jdbcType=INTEGER},
+	    	#{access_date, jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<update id="updateSchCnt" parameterType="String">
+		UPDATE DS_ACCESS_TX SET 
+			sch_cnt=sch_cnt+1
+		WHERE 
+			access_date=#{access_date, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateStdCnt" parameterType="String">
+		UPDATE DS_ACCESS_TX SET 
+			std_cnt=std_cnt+1
+		WHERE 
+			access_date=#{access_date, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="countAccessLast6Months" parameterType="hashmap" resultMap="accesscnt">
+		SELECT 	DATE_FORMAT(ACCESS_DATE, '%Y-%m') AS ACCESS_DATE, (SUM(SCH_CNT) + SUM(STD_CNT)) AS ACCESS_CNT,
+				SUM(SCH_CNT) AS SCH_CNT, SUM(STD_CNT) AS STD_CNT
+		FROM 	DS_ACCESS_TX
+		WHERE 	DATE_FORMAT(ACCESS_DATE, '%Y-%m-%d') >= DATE_ADD(DATE_FORMAT(ACCESS_DATE, '%Y-%m-%d'), INTERVAL -6 MONTH)
+		GROUP 	BY DATE_FORMAT(ACCESS_DATE, '%Y-%m')
+	</select>
+</mapper>

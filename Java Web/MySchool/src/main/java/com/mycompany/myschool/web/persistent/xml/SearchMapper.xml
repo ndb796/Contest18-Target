@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.common.SearchMapper">
+	<resultMap id="search_info" type="com.mycompany.myschool.web.entity.common.SearchEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="sch_id" column="sch_id" jdbcType="VARCHAR" />
+		<id property="cust_id" column="cust_id" jdbcType="VARCHAR" />
+		<id property="school_name" column="school_name" jdbcType="VARCHAR" />
+		<id property="school_copy" column="school_copy" jdbcType="VARCHAR" />
+		<id property="history" column="history" jdbcType="VARCHAR" />
+		<id property="station" column="station" jdbcType="VARCHAR" />
+		<id property="name" column="name" jdbcType="VARCHAR" />
+		<id property="op_time" column="op_time" jdbcType="VARCHAR" />
+		<id property="sb_type" column="sb_type" jdbcType="VARCHAR" />
+		<id property="hiragana" column="hiragana" jdbcType="VARCHAR" />
+		<id property="hurigana" column="hurigana" jdbcType="VARCHAR" />
+		<id property="yomigana" column="yomigana" jdbcType="VARCHAR" />
+		<id property="sht_name" column="sht_name" jdbcType="VARCHAR" />
+		<id property="sht_name_yg" column="sht_name_yg" jdbcType="VARCHAR" />
+		<id property="sch_cate_id" column="sch_cate_id" jdbcType="VARCHAR" />
+		<id property="sch_founder_id" column="sch_founder_id" jdbcType="VARCHAR" />
+		<id property="sch_founder_prv" column="sch_founder_prv" jdbcType="VARCHAR" />
+		<id property="sch_founder_pub" column="sch_founder_pub" jdbcType="VARCHAR" />
+		<id property="prefecture_id" column="prefecture_id" jdbcType="VARCHAR" />
+		<id property="zipcode" column="zipcode" jdbcType="VARCHAR" />
+		<id property="address" column="address" jdbcType="VARCHAR" />
+		<id property="address1" column="address1" jdbcType="VARCHAR" />
+		<id property="address2" column="address2" jdbcType="VARCHAR" />
+		<id property="address3" column="address3" jdbcType="VARCHAR" />
+		<id property="address4" column="address4" jdbcType="VARCHAR" />
+		<id property="chr_dept" column="chr_dept" jdbcType="VARCHAR" />
+		<id property="chr_tel" column="chr_tel" jdbcType="VARCHAR" />
+		<id property="chr_fax" column="chr_fax" jdbcType="VARCHAR" />
+		<id property="chr_tel_memo" column="chr_tel_memo" jdbcType="VARCHAR" />
+		<id property="freedial" column="freedial" jdbcType="VARCHAR" />
+		<id property="freedial_memo" column="freedial_memo" jdbcType="VARCHAR" />
+		<id property="foundyear" column="foundyear" jdbcType="VARCHAR" />
+		<id property="pamphlet" column="pamphlet" jdbcType="VARCHAR" />
+		<id property="pamphletstart" column="pamphletstart" jdbcType="VARCHAR" />
+		<id property="memo" column="memo" jdbcType="VARCHAR" />
+		<id property="url_pc" column="url_pc" jdbcType="VARCHAR" />
+		<id property="url_mobile" column="url_mobile" jdbcType="VARCHAR" />
+		<id property="url_career_pc" column="url_career_pc" jdbcType="VARCHAR" />
+		<id property="email" column="email" jdbcType="VARCHAR" />
+		<id property="keywords" column="keywords" jdbcType="VARCHAR" />
+		<id property="favor_cnt" column="favor_cnt" jdbcType="INTEGER" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="selectForSearchMiddleschool" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT 	SCH_ID, SCHOOL_NAME AS NAME, ADDRESS,  TEL AS CHR_TEL 
+		FROM 	DS_SCHMID_BASE
+		WHERE	1 = 1
+			<if test="prefecture_id != null">
+		    	AND PREFECTURE_ID = #{prefecture_id}
+			</if>
+			<if test="sch_founder_prv != null">
+		    	AND SCH_CATEGORY IN ('사립') 
+			</if>
+			<if test="sch_founder_pub != null">
+		    	AND SCH_CATEGORY IN ('국립') 
+			</if>
+		ORDER BY SCHOOL_NAME ASC
+	</select>
+	
+	<select id="selectAllschoolList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT @IDX:=@IDX+1 AS IDX, A.SCH_ID, A.SCHOOL_NAME AS NAME, SCHOOL_TYPE AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = A.SCH_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = A.SCH_ID) as RCMMD_CNT
+		FROM DS_SCHOOL_LIST_VIEW A, (SELECT @IDX:=0) T
+		<if test="searchValue != null">
+		    WHERE A.SCHOOL_NAME LIKE '%${searchValue}%'
+		</if>
+		<if test="orderType == null || orderDir == null ">
+		ORDER BY IDX DESC
+		</if>
+		<if test="orderType == 'NAME'">
+		ORDER BY A.SCHOOL_NAME
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		<if test="orderType == 'IDX'">
+		ORDER BY IDX
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		LIMIT #{startRecord}, 10;
+	</select>
+	
+	<select id="selectMiddleschoolList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT * FROM (SELECT M.IDX, M.SCH_ID, M.SCHOOL_NAME AS NAME, 2 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = M.SCH_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = M.SCH_ID) as RCMMD_CNT
+		FROM DS_SCHMID_BASE M
+		<if test="searchValue != null">
+		    WHERE M.SCHOOL_NAME LIKE '%${searchValue}%'
+		</if>
+		LIMIT #{startRecord}, 10
+		UNION
+		SELECT SB.IDX, SB.SCHOOL_ID AS SCH_ID, SB.SB_NAME AS NAME, 2 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = SB.SCHOOL_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = SB.SCHOOL_ID) as RCMMD_CNT
+		FROM DS_SCHOOL_BRANCH_TX SB 
+		WHERE SB_TYPE=2
+		LIMIT #{startRecord}, 10) A 
+		<if test="orderType == null || orderDir == null ">
+		ORDER BY IDX DESC
+		</if>
+		<if test="orderType == 'NAME'">
+		ORDER BY NAME
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		<if test="orderType == 'IDX'">
+		ORDER BY IDX
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+	</select>
+	
+	<select id="selectForSearchHighschool" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT 	SCH_ID, NAME, CONCAT(ADDRESS1, ' ', ADDRESS2, ' ', ADDRESS3) as ADDRESS,  CHR_TEL 
+		FROM 	DS_SEARCH_HIGH_TX
+		WHERE	(DEL_FLG IS NULL OR DEL_FLG = 0)
+			<if test="prefecture_id != null">
+		    	AND PREFECTURE_ID = #{prefecture_id}
+			</if>
+			<if test="sch_founder_prv != null">
+		    	AND SCH_FOUNDER_ID = #{sch_founder_prv}
+			</if>
+			<if test="sch_founder_pub != null">
+		    	AND (SCH_FOUNDER_ID = '1' OR SCH_FOUNDER_ID = '2')
+			</if>
+			<if test="keywords != null">
+			AND SCH_ID IN (SELECT SB_ID FROM DS_SCHOOL_KEY_TX WHERE DATA_TYPE=0 AND KEYCODE IN (
+				<foreach collection="keywordsArray" item="keyword" separator=",">#{keyword}</foreach>
+				)
+			)
+			</if>
+		ORDER BY NAME ASC
+		
+	</select>
+	
+	<select id="selectHighschoolList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT * FROM (SELECT H.IDX, H.SCH_ID, H.NAME, 3 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = H.SCH_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = H.SCH_ID) as RCMMD_CNT
+		FROM DS_SEARCH_HIGH_TX H
+		<if test="searchValue != null">
+		    WHERE H.NAME LIKE '%${searchValue}%'
+		</if>
+		LIMIT #{startRecord}, 10
+		UNION
+		SELECT SB.IDX, SB.SCHOOL_ID AS SCH_ID, SB.SB_NAME AS NAME, 3 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = SB.SCHOOL_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = SB.SCHOOL_ID) as RCMMD_CNT
+		FROM DS_SCHOOL_BRANCH_TX SB 
+		WHERE SB_TYPE=3
+		LIMIT #{startRecord}, 10) A 
+		<if test="orderType == null || orderDir == null ">
+		ORDER BY IDX DESC
+		</if>
+		<if test="orderType == 'NAME'">
+		ORDER BY NAME
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		<if test="orderType == 'IDX'">
+		ORDER BY IDX
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+	</select>
+	
+	<select id="selectForSearchInUniv" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT 	SCH_ID, NAME, ADDRESS, TEL AS CHR_TEL
+		FROM 	DS_SEARCH_UNIV_TX
+		WHERE	(DEL_FLG IS NULL OR DEL_FLG = 0)
+			<if test="prefecture_id != null">
+		    	AND PREFECTURE_ID = #{prefecture_id}
+			</if>
+			<if test="sch_founder_prv != null">
+		    	AND SCH_FOUNDER_ID = #{sch_founder_prv}
+			</if>
+			<if test="sch_founder_pub != null">
+		    	AND (SCH_FOUNDER_ID = '1' OR SCH_FOUNDER_ID = '2')
+			</if>
+			<if test="keywords != null">
+				AND SCH_ID IN (SELECT SB_ID FROM DS_SCHOOL_KEY_TX WHERE DATA_TYPE=0 AND KEYCODE IN (
+					<foreach collection="keywordsArray" item="keyword" separator=",">#{keyword}</foreach>
+					)
+				)
+			</if>
+		ORDER BY NAME ASC
+	</select>
+	
+	<select id="selectUniversityList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT * FROM (SELECT  @rownum:=@rownum+1 AS IDX, U.SCH_ID, U.NAME, 4 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = U.SCH_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = U.SCH_ID) as RCMMD_CNT
+		FROM DS_SEARCH_UNIV_TX U, (SELECT @rownum:=0) TMP
+		<if test="searchValue != null">
+		    WHERE U.NAME LIKE '%${searchValue}%'
+		</if>
+		LIMIT #{startRecord}, 10
+		UNION
+		SELECT SB.IDX, SB.SCHOOL_ID AS SCH_ID, SB.SB_NAME AS NAME, 4 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = SB.SCHOOL_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = SB.SCHOOL_ID) as RCMMD_CNT
+		FROM DS_SCHOOL_BRANCH_TX SB 
+		WHERE SB_TYPE=4
+		LIMIT #{startRecord}, 10) A 
+		<if test="orderType == null || orderDir == null ">
+		ORDER BY IDX DESC
+		</if>
+		<if test="orderType == 'NAME'">
+		ORDER BY NAME
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		<if test="orderType == 'IDX'">
+		ORDER BY IDX
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+	</select>
+	
+	<select id="selectForSearchInVocational" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT 	SCH_ID, CUST_NAME AS NAME, CONCAT(ADDRESS1, ' ', ADDRESS2) AS ADDRESS, TEL AS CHR_TEL 
+		FROM 	DS_SEARCH_VOCA_TX
+		WHERE	(DEL_FLG IS NULL OR DEL_FLG = 0)
+			<if test="prefecture_id != null">
+		    	AND PREFECTURE_ID = #{prefecture_id}
+			</if>
+			<if test="sch_founder_prv != null">
+		    	AND SCH_FOUNDER_ID = #{sch_founder_prv}
+			</if>
+			<if test="sch_founder_pub != null">
+		    	AND (SCH_FOUNDER_ID = '1' OR SCH_FOUNDER_ID = '2')
+			</if>
+			<if test="keywords != null">
+				AND SCH_ID IN (SELECT SB_ID FROM DS_SCHOOL_KEY_TX WHERE DATA_TYPE=0 AND KEYCODE IN (
+					<foreach collection="keywordsArray" item="keyword" separator=",">#{keyword}</foreach>
+					)
+				)
+			</if>
+		ORDER BY NAME ASC
+	</select>
+	
+	<select id="selectVocationalList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT * FROM (SELECT @rownum:=@rownum+1 AS IDX, V.SCH_ID, V.CUST_NAME AS NAME, 5 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = V.SCH_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = V.SCH_ID) as RCMMD_CNT
+		FROM DS_SEARCH_VOCA_TX V
+		<if test="searchValue != null">
+		    WHERE V.CUST_NAME LIKE '%${searchValue}%'
+		</if>
+		LIMIT #{startRecord}, 10
+		UNION
+		SELECT SB.IDX, SB.SCHOOL_ID AS SCH_ID, SB.SB_NAME AS NAME, 5 AS SB_TYPE, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = SB.SCHOOL_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = SB.SCHOOL_ID) as RCMMD_CNT
+		FROM DS_SCHOOL_BRANCH_TX SB 
+		WHERE SB_TYPE=5
+		LIMIT #{startRecord}, 10) A 
+		<if test="orderType == null || orderDir == null ">
+		ORDER BY IDX DESC
+		</if>
+		<if test="orderType == 'NAME'">
+		ORDER BY NAME
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		<if test="orderType == 'IDX'">
+		ORDER BY IDX
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+	</select>
+	
+	<select id="selectCountMiddleschoolList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultType="Integer">
+		SELECT SUM(CNT) FROM(
+			SELECT COUNT(IDX) AS CNT
+			FROM DS_SCHMID_BASE
+			<if test="searchValue != null">
+			     WHERE SCHOOL_NAME LIKE '%${searchValue}%'
+			</if>
+			UNION
+			SELECT COUNT(SB.IDX) AS CNT
+			FROM DS_SCHOOL_BRANCH_TX SB 
+			WHERE SB_TYPE=2) AS A
+	</select>
+	
+	<select id="selectCountHighschoolList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultType="Integer">
+		SELECT COUNT(IDX) 
+		FROM DS_SEARCH_HIGH_TX
+		<if test="searchValue != null">
+		     WHERE NAME LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="selectCountUniversityList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM DS_SEARCH_UNIV_TX
+		<if test="searchValue != null">
+		     WHERE NAME LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="selectCountVocationalList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM DS_SEARCH_VOCA_TX
+		<if test="searchValue != null">
+		     WHERE CUST_NAME LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="selectCountAllList" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM DS_SCHOOL_LIST_VIEW
+		<if test="searchValue != null">
+		     WHERE SCHOOL_NAME LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="selectMemberSchoolOne" parameterType="String" resultMap="search_info">
+	    SELECT 	SB.IDX, SB.SCHOOL_ID AS SCH_ID, SB.SB_NAME AS NAME, SB.SB_TITLE1 AS SCHOOL_COPY,
+				CONCAT(SB.SB_FEATURES, SB.SB_POLICY) AS HISTORY, SB.SB_DEPT AS CHR_DEPT, SB.SB_TEL AS CHR_TEL,
+		    	SB.SB_ZIPCODE AS ZIPCODE, CONCAT(SB.SB_ADDRESS1, SB.SB_ADDrESS2) AS ADDRESS, SB.SB_ACCESS AS STATION
+		FROM 	DS_SCHOOL_BRANCH_TX SB
+	    WHERE	SB.SCHOOL_ID=#{sch_id} 
+	</select>
+	
+	<select id="selectMiddleschoolOne" parameterType="String" resultMap="search_info">
+	    SELECT 	B.IDX, B.SCH_ID, B.SCHOOL_NAME AS NAME, '' AS OP_TIME, 2 AS SB_TYPE, 
+	    		HIRAGANA, SCH_CATEGORY, ZIPCODE, PREFECTURE_ID, ADDRESS,
+	    		'' AS CHR_DEPT, TEL AS CHR_TEL, B.INS_DATE, I.SCHOOL_COPY, I.HISTORY, I.STATION
+	    FROM	DS_SCHMID_BASE B JOIN DS_SCHMID_BASEINFO I ON B.SCH_ID = I.SCH_ID
+	    WHERE	B.SCH_ID=#{sch_id} 
+	</select>
+	
+	<select id="selectHighschoolOne" parameterType="String" resultMap="search_info">
+	    SELECT 	IDX, SCH_ID, NAME, OP_TIME, 3 AS SB_TYPE, 
+	    		HIRAGANA, SCH_FOUNDER_ID, ZIPCODE, PREFECTURE_ID, CONCAT(ADDRESS1, ADDRESS2, ADDRESS3) AS ADDRESS,
+	    		CHR_DEPT, CHR_TEL, CHR_FAX, MEMO, INS_DATE, UPD_DATE
+	    FROM	DS_SEARCH_HIGH_TX
+	    WHERE	SCH_ID=#{sch_id} 
+	</select>
+	
+	<select id="selectUniversityOne" parameterType="String" resultMap="search_info">
+	    SELECT 	SCH_ID, NAME, MEMO, YOMIGANA, URL_PC, URL_MOBILE, EMAIL, 4 AS SB_TYPE, 
+	    		ZIPCODE, PREFECTURE_ID, ADDRESS, TEL AS CHR_DEPT, TEL_MEMO AS CHR_TEL_MEMO,
+	    		FREEDIAL, FREEDIAL_MEMO, FAX AS CHR_FAX, FOUNDYEAR, INS_DATE, UPD_DATE, SCH_FOUNDER_ID
+	    FROM	DS_SEARCH_UNIV_TX
+	    WHERE	SCH_ID=#{sch_id} 
+	</select>
+	
+	<select id="selectVocationalOne" parameterType="String" resultMap="search_info">
+	    SELECT 	SCH_ID, CUST_NAME AS NAME, HURIGANA, ZIPCODE, PREFECTURE_ID, 5 AS SB_TYPE, 
+	    		CONCAT(ADDRESS1, ADDRESS2) AS ADDRESS,
+	    		TEL AS CHR_TEL, INS_DATE, UPD_DATE, SCH_FOUNDER_ID
+	    FROM	DS_SEARCH_VOCA_TX
+	    WHERE	SCH_ID=#{sch_id} 
+	</select>
+	
+	<select id="selectForRcmmdWithSchoolKeyword" parameterType="hashmap" resultMap="search_info">
+		SELECT * FROM (SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND  --> SCHOOL_NAME LIKE '%${school_name1}%' 
+		LIMIT #{school_limit1}) A
+		<if test="school_name2 != null">
+		UNION
+		SELECT * FROM (SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND --> SCHOOL_NAME LIKE '%${school_name2}%' 
+		LIMIT #{school_limit2}) B
+		</if>
+		<if test="school_name3 != null">
+		UNION
+		SELECT * FROM (SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND --> SCHOOL_NAME LIKE '%${school_name3}%' 
+		LIMIT #{school_limit3}) C
+		</if>
+	</select>
+	
+	<select id="selectForRcmmdWithAddressKeyword" parameterType="hashmap" resultMap="search_info">
+		SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND  --> ADDRESS LIKE '%${school_loc1}%' 
+		LIMIT #{school_limit1}
+		<if test="school_loc2 != null">
+		UNION
+		SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND --> ADDRESS LIKE '%${school_loc2}%' 
+		LIMIT #{school_limit2}
+		</if>
+		<if test="school_loc3 != null">
+		UNION
+		SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND --> ADDRESS LIKE '%${school_loc3}%' 
+		LIMIT #{school_limit3}
+		</if>
+	</select>
+	
+	<!-- address is equals to addres1, address2 and address3 -->
+	<select id="selectForRcmmdWithAddress1" parameterType="hashmap" resultMap="search_info">
+		SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND  -->ZIPCODE = #{zipcode}
+		ORDER BY SCH_ID ASC
+		LIMIT 	10;
+	</select>
+	
+	<!-- address is equals to addres1 and address2 -->
+	<select id="selectForRcmmdWithAddress2" parameterType="hashmap" resultMap="search_info">
+		SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND  -->ADDRESS LIKE '%${address}%'
+		ORDER BY SCH_ID ASC
+		LIMIT 	10;
+	</select>
+	
+	<!-- address is equals to only addres1 -->
+	<select id="selectForRcmmdWithAddress3" parameterType="hashmap" resultMap="search_info">
+		SELECT 	SCH_ID, SCHOOL_TYPE
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE	<!-- SCHOOL_TYPE = #{school_type} AND  -->ADDRESS LIKE '%${address}%'
+		ORDER BY SCH_ID ASC
+		LIMIT 	10;
+	</select>
+	
+	<select id="countSchoolThisWeek" parameterType="hashmap" resultType="Integer">
+		SELECT 	COUNT(*) AS schoolCnt
+		FROM 	DS_SCHOOL_LIST_VIEW
+		WHERE 	DATE_FORMAT(INS_DATE, '%Y-%m-%d') BETWEEN #{startD} AND #{endD}
+	</select>
+	
+	<select id="selectNewSchool" resultType="com.mycompany.myschool.web.entity.admin.MainEntity">
+		SELECT
+			(SELECT DATE_FORMAT(INS_DATE, '%m-%d %h:%i') FROM DS_SCHOOL_LIST_VIEW ORDER BY INS_DATE DESC LIMIT 0, 1) AS newSchool1,
+			DATE_FORMAT(TIMEDIFF(NOW(), (SELECT INS_DATE FROM DS_SCHOOL_LIST_VIEW ORDER BY INS_DATE DESC LIMIT 0, 1)), '%H:%i') AS newSchool2
+		FROM DUAL
+	</select>
+	
+	<select id="selectForSearchFromView" parameterType="com.mycompany.myschool.web.entity.common.SearchEntity" resultMap="search_info">
+		SELECT 	*,
+				(select count(sb_id) from DS_FAVORITE_TX f where f.sb_id = v.sch_id) as favor_cnt
+		FROM 	DS_SCHOOL_LIST_VIEW v
+		WHERE	SCHOOL_TYPE = #{school_type}
+				<if test="prefecture_id != null and prefecture_id != ''">
+					AND PREFECTURE_ID = #{prefecture_id} 
+				</if>
+				<if test="keyword != null and keyword != ''">
+					AND (SCHOOL_NAME LIKE '%${keyword}%' OR ADDRESS LIKE '%${keyword}%')
+				</if>
+		ORDER BY SCH_ID ASC
+		LIMIT 	20;
+	</select>
+</mapper>

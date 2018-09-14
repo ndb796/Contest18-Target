@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.student.RecommendMapper">
+
+	<resultMap id="rcmmd" type="com.mycompany.myschool.web.entity.student.RecommendEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="rcmmd_id" column="rcmmd_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="rcmmd_type" column="rcmmd_type" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="rcmmd_list" type="com.mycompany.myschool.web.entity.vo.RecommendListVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="school_name" column="school_name" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="student_name" column="student_name" jdbcType="VARCHAR" />
+		<id property="location" column="location" jdbcType="VARCHAR" />
+		<id property="address" column="address" jdbcType="VARCHAR" />
+		<id property="cur_school" column="cur_school" jdbcType="VARCHAR" />
+		<id property="school_type" column="school_type" jdbcType="VARCHAR" />
+		<id property="school_category" column="school_category" jdbcType="VARCHAR" />
+		<id property="rcmmd_type" column="rcmmd_type" jdbcType="VARCHAR" />
+		<id property="const_status" column="const_status" jdbcType="INTEGER" />
+		<id property="rcmmd_cnt" column="rcmmd_cnt" jdbcType="INTEGER" />
+		<id property="favor_cnt" column="favor_cnt" jdbcType="INTEGER" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		rcmmd_id,
+		student_id,
+		sb_id,
+		rcmmd_type,
+		ins_date,
+		upd_date
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(RCMMD_ID) 
+		FROM
+			DS_RCMMD_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.student.RecommendEntity" resultMap="rcmmd">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_RCMMD_TX
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+			<if test="rcmmd_type != null and rcmmd_type != ''">
+				AND rcmmd_type = #{rcmmd_type}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByRcmmdId" parameterType="String" resultMap="rcmmd">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_RCMMD_TX
+		WHERE 
+			rcmmd_id = #{rcmmd_id}
+	</select>
+	
+	<select id="selectByStudentId" parameterType="String" resultMap="rcmmd">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_RCMMD_TX
+		WHERE 
+			student_id = #{student_id}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectBySchoolId" parameterType="String" resultMap="rcmmd">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_RCMMD_TX
+		WHERE 
+			sb_id = #{sb_id}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectRcmmdByStudentId" parameterType="String" resultMap="rcmmd_list">
+		SELECT
+			r.sb_id, b.sb_name, b.sb_type, r.rcmmd_type, 
+            (select const_status from DS_SNS_CONSULT_TX where school_id = b.school_id and ins_date=(select max(ins_date) from DS_SNS_CONSULT_TX)) as const_status
+		FROM
+			(DS_RCMMD_TX r join DS_SCHOOL_BRANCH_TX b on r.sb_id = b.sb_id)
+		WHERE
+			r.student_id = #{student_id}
+		ORDER BY r.idx DESC
+	</select>
+	
+	<select id="selectRcmmdSchoolListViewByStudentId" parameterType="String" resultMap="rcmmd_list">
+		SELECT
+			r.sb_id, v.school_name, v.school_type, r.rcmmd_type, v.address, 
+            (select count(sb_id) from DS_RCMMD_TX r2 where r2.sb_id = v.sch_id) as rcmmd_cnt,            
+			(select count(sb_id) from DS_FAVORITE_TX f where f.sb_id = v.sch_id) as favor_cnt,
+            r.ins_date
+		FROM
+			(DS_RCMMD_TX r join DS_SCHOOL_LIST_VIEW v on r.sb_id = v.sch_id)
+		WHERE
+			r.student_id = #{student_id}
+		ORDER BY r.idx DESC
+	</select>
+	
+	<select id="selectRcmmdBySchoolId" parameterType="String" resultMap="rcmmd_list">
+		SELECT
+			r.student_id
+			,(select CONCAT(fname, " ", lname) from DS_STUDENT_TX where student_id=r.student_id) as student_name
+			,r.rcmmd_type
+            ,(select const_status from DS_SNS_CONSULT_TX where student_id = r.student_id and ins_date=(select max(ins_date) from DS_SNS_CONSULT_TX)) as const_status
+		FROM
+			(DS_RCMMD_TX r join DS_STUDENT_TX s on r.student_id = s.student_id)
+		WHERE
+			<!-- r.sb_id = #{SB_ID} -->
+			r.sb_id IN (SELECT sb_id FROM DS_SCHOOL_BRANCH_TX WHERE school_id=#{school_id}) or r.sb_id = #{school_id}
+		ORDER BY r.idx DESC
+	</select>
+	
+	<select id="selectRcmmdStudentBySchoolId" parameterType="String" resultMap="rcmmd_list">
+		SELECT r.idx, r.student_id, 
+			   CONCAT(std.fname, " ", std.lname) as student_name, std.location, 
+			   (select cur_school_name from DS_STUDENT_SUB1_TX c where c.student_id = r.student_id) as cur_school, 
+			   r.ins_date
+		FROM 
+			DS_RCMMD_TX r join DS_STUDENT_TX std
+		ON 
+			r.student_id = std.student_id
+		WHERE 
+			r.sb_id IN (SELECT sb_id FROM DS_SCHOOL_BRANCH_TX WHERE school_id=#{school_id})
+		ORDER BY r.idx DESC
+	</select>
+	
+	<select id="selectCountByStudentId" parameterType="String" resultType="Integer">
+		SELECT 	COUNT(RCMMD_ID)
+		FROM 	DS_RCMMD_TX
+		WHERE 	STUDENT_ID = #{student_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.student.RecommendEntity">
+	    INSERT INTO DS_RCMMD_TX 
+	    ( rcmmd_id, student_id, sb_id, rcmmd_type, ins_date )
+	    VALUES
+	    ( #{rcmmd_id, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	#{sb_id, jdbcType=VARCHAR},
+	    	#{rcmmd_type, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.student.RecommendEntity">
+		UPDATE DS_RCMMD_TX SET 
+			student_id=#{student_id, jdbcType=VARCHAR},
+			sb_id=#{sb_id, jdbcType=VARCHAR},
+			rcmmd_type=#{rcmmd_type, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			rcmmd_id=#{rcmmd_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_RCMMD_TX 
+		WHERE 
+			rcmmd_id=#{rcmmd_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteOldDataByStudentId" parameterType="String">
+		DELETE 	FROM DS_RCMMD_TX 
+		WHERE 
+				STUDENT_ID = #{student_id}
+				AND DATE_SUB(NOW(), INTERVAL 7 DAY) > ins_date;
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.student.RecommendEntity">
+		DELETE FROM DS_RCMMD_TX 
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+	</delete>
+</mapper>

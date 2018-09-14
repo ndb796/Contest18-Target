@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.student.FavoriteMapper">
+
+	<resultMap id="favorite" type="com.mycompany.myschool.web.entity.student.FavoriteEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="favorite_id" column="favorite_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="favor_list" type="com.mycompany.myschool.web.entity.vo.FavoriteListVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="school_name" column="school_name" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="student_name" column="student_name" jdbcType="VARCHAR" />
+		<id property="location" column="location" jdbcType="VARCHAR" />
+		<id property="cur_school" column="cur_school" jdbcType="VARCHAR" />
+		<id property="school_type" column="school_type" jdbcType="VARCHAR" />
+		<id property="school_category" column="school_category" jdbcType="VARCHAR" />
+		<id property="rcmmd_type" column="rcmmd_type" jdbcType="VARCHAR" />
+		<id property="const_status" column="const_status" jdbcType="INTEGER" />
+		<id property="favr_cnt" column="favr_cnt" jdbcType="INTEGER" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="columns">
+		idx,
+		favorite_id,
+		student_id,
+		sb_id,
+		ins_date,
+		upd_date
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(FAVORITE_ID) 
+		FROM
+			DS_FAVORITE_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.student.FavoriteEntity" resultMap="favorite">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_FAVORITE_TX
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.student.FavoriteEntity" resultMap="favorite">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_FAVORITE_TX
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectFavoriteSchoolByStudentId" parameterType="String" resultMap="favor_list">
+		SELECT
+			f.sb_id, b.sb_name, b.sb_type, 
+            (select count(sb_id) from DS_FAVORITE_TX f2 where f2.sb_id = f.sb_id) as favr_cnt,
+                        f.ins_date
+		FROM
+			(DS_FAVORITE_TX f join DS_SCHOOL_BRANCH_TX b on f.sb_id = b.sb_id)
+		WHERE
+			f.student_id = #{student_id}
+		ORDER BY f.idx DESC
+	</select>
+	
+	<select id="selectFavoriteSchoolListViewByStudentId" parameterType="String" resultMap="favor_list">
+		SELECT
+			f.sb_id, v.school_name, v.school_type, v.address, 
+            (select count(sb_id) from DS_FAVORITE_TX f2 where f2.sb_id = v.sch_id) as favr_cnt,
+                        f.ins_date
+		FROM
+			(DS_FAVORITE_TX f join DS_SCHOOL_LIST_VIEW v on f.sb_id = v.sch_id)
+		WHERE
+			f.student_id = #{student_id}
+		ORDER BY f.idx DESC
+	</select>
+	
+	<select id="selectByFavoriteId" parameterType="String" resultMap="favorite">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_FAVORITE_TX
+		WHERE 
+			favorite_id = #{favorite_id}
+	</select>
+	
+	<select id="selectFavoriteStudentBySchoolId" parameterType="String" resultMap="favor_list">
+		SELECT f.idx, f.student_id, 
+			   CONCAT(std.fname, " ", std.lname) as student_name, std.location, 
+			   (select cur_school_name from DS_STUDENT_SUB1_TX c where c.student_id = f.student_id) as cur_school, 
+			   f.ins_date
+		FROM 
+			DS_FAVORITE_TX f join DS_STUDENT_TX std
+		ON 
+			f.student_id = std.student_id
+		WHERE 
+			f.sb_id IN (SELECT sb_id FROM DS_SCHOOL_BRANCH_TX WHERE school_id=#{school_id})
+		ORDER BY f.idx DESC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.student.FavoriteEntity">
+	    INSERT INTO DS_FAVORITE_TX 
+	    ( favorite_id,student_id, sb_id, ins_date )
+	    VALUES
+	    ( #{favorite_id, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	#{sb_id, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.student.FavoriteEntity">
+		UPDATE DS_FAVORITE_TX SET 
+			student_id=#{student_id, jdbcType=VARCHAR},
+			sb_id=#{sb_id, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			favorite_id=#{favorite_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="com.mycompany.myschool.web.entity.student.FavoriteEntity">
+		DELETE FROM DS_FAVORITE_TX 
+		WHERE 
+			student_id=#{student_id, jdbcType=VARCHAR} AND
+			sb_id=#{sb_id, jdbcType=VARCHAR} 
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.student.FavoriteEntity">
+		DELETE FROM DS_FAVORITE_TX 
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+	</delete>
+</mapper>

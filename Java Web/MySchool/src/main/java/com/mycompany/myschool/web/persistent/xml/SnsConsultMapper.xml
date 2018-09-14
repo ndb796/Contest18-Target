@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.SnsConsultMapper">
+
+	<resultMap id="sns_consult" type="com.mycompany.myschool.web.entity.sns.SnsConsultEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="const_status" column="const_status" jdbcType="INTEGER" />
+		<id property="contents" column="contents" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="ins_date_str" column="ins_date_str" jdbcType="VARCHAR" />
+		<id property="del_date" column="del_date" jdbcType="TIMESTAMP" />
+		<id property="del_date_str" column="del_date_str" jdbcType="VARCHAR" />
+		<id property="del_flg" column="del_flg" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="columns">
+		idx,
+		student_id,
+		sb_id,
+		const_status,
+		contents,
+		ins_date,
+		DATE_FORMAT(INS_DATE, '%Y-%m-%d %H:%i:%S') AS INS_DATE_STR,
+		DATE_FORMAT(DEL_DATE, '%Y-%m-%d %H:%i:%S') AS DEL_DATE_STR,
+		del_date,
+		del_flg
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.SnsConsultEntity" resultMap="sns_consult">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SNS_CONSULT_TX
+		WHERE 
+			(DEL_FLG IS NULL OR DEL_FLG = 0)
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+			<if test="const_status != null and const_status != ''">
+				AND const_status = #{const_status}
+			</if>
+		ORDER BY IDX ASC 
+	</select>
+	
+	<select id="selectForAdmin" parameterType="com.mycompany.myschool.web.entity.sns.SnsConsultEntity" resultMap="sns_consult">
+		SELECT 		@ROWNUM := @ROWNUM + 1 AS NO, IDX, STUDENT_ID, SB_ID, MAX(CONST_STATUS) AS CONST_STATUS, INS_DATE, DATE_FORMAT(INS_DATE, '%Y-%m-%d %H:%i:%S') AS INS_DATE_STR
+		FROM 		DS_SNS_CONSULT_TX, (SELECT @ROWNUM := 0) R
+		GROUP BY 	STUDENT_ID, SB_ID 
+		ORDER BY 	NO DESC
+	</select>
+	
+	<select id="selectByStudentId" parameterType="com.mycompany.myschool.web.entity.sns.SnsConsultEntity" resultMap="sns_consult">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SNS_CONSULT_TX
+		WHERE 
+			(DEL_FLG IS NULL OR DEL_FLG = 0) and
+			student_id = #{student_id} and sb_id = #{sb_id}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectBySchoolId" parameterType="com.mycompany.myschool.web.entity.sns.SnsConsultEntity" resultMap="sns_consult">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SNS_CONSULT_TX
+		WHERE 
+			(DEL_FLG IS NULL OR DEL_FLG = 0) and
+			sb_id = #{sb_id} and student_id = #{student_id}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="hashmap" resultMap="sns_consult">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SNS_CONSULT_TX
+		WHERE 
+			idx = #{idx}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.SnsConsultEntity">
+	    INSERT INTO DS_SNS_CONSULT_TX 
+	    ( student_id, sb_id, const_status, contents, ins_date )
+	    VALUES
+	    ( #{student_id, jdbcType=VARCHAR},
+	    	#{sb_id, jdbcType=VARCHAR},
+	    	#{const_status, jdbcType=INTEGER},
+	    	#{contents, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM DS_SNS_CONSULT_TX 
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.sns.SnsConsultEntity">
+		DELETE FROM DS_SNS_CONSULT_TX 
+		WHERE 
+			1 = 1
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+	</delete>
+	
+	<select id="countConsultThisWeek" parameterType="hashmap" resultType="Integer">
+		SELECT 	COUNT(*) AS consultCnt
+		FROM 	DS_SNS_CONSULT_TX
+		WHERE 	(DEL_FLG IS NULL OR DEL_FLG = 0) AND DATE_FORMAT(INS_DATE, '%Y-%m-%d') BETWEEN #{startD} AND #{endD}
+	</select>
+	
+	<select id="selectNewConsult" resultType="com.mycompany.myschool.web.entity.admin.MainEntity">
+		SELECT
+			(SELECT DATE_FORMAT(INS_DATE, '%m-%d %h:%i') FROM DS_SNS_CONSULT_TX ORDER BY IDX DESC LIMIT 0, 1) AS newConsult1,
+			DATE_FORMAT(TIMEDIFF(NOW(), (SELECT INS_DATE FROM DS_SNS_CONSULT_TX ORDER BY IDX DESC LIMIT 0, 1)), '%H:%i') AS newConsult2
+		FROM DUAL
+	</select>
+</mapper>

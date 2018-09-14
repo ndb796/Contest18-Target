@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.CommentMapper">
+
+	<resultMap id="comment" type="com.mycompany.myschool.web.entity.sns.CommentEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="board_id" column="board_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="comments" column="comments" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		board_id,
+		student_id,
+		comments,
+		ins_date,
+		upd_date
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.CommentEntity" resultMap="comment">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_COMMENT_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="board_id != null and board_id != ''">
+				AND board_id = #{board_id}
+			</if>
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.sns.CommentEntity" resultMap="comment">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_COMMENT_TX
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByBoard" parameterType="String" resultMap="comment">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_COMMENT_TX
+		WHERE
+			board_id = #{board_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<select id="selectByStudent" parameterType="String" resultMap="comment">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_COMMENT_TX
+		WHERE
+			student_id = #{student_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.CommentEntity">
+	    INSERT INTO DS_COMMENT_TX 
+	    ( board_id, student_id, comments, ins_date, upd_date )
+	    VALUES
+	    ( 	#{board_id, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	#{comments, jdbcType=VARCHAR},
+	    	NOW(), NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.sns.CommentEntity">
+		UPDATE DS_COMMENT_TX SET 
+			comments=#{comments, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM DS_COMMENT_TX 
+		WHERE 
+			idx = #{idx, jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.sns.CommentEntity">
+		DELETE FROM DS_COMMENT_TX 
+		WHERE 
+			(IDX > 0) 
+			<if test="board_id != null and board_id != ''">
+				AND board_id = #{board_id}
+			</if>
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+	</delete>
+</mapper>

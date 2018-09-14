@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerImageMapper">
+
+	<resultMap id="school_img" type="com.mycompany.myschool.web.entity.customer.CustomerImageEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="img_ord" column="img_ord" jdbcType="INTEGER" />
+		<id property="filename" column="filename" jdbcType="VARCHAR" />
+		<id property="filesize" column="filesize" jdbcType="BIGINT" />
+		<id property="origin_name" column="origin_name" jdbcType="VARCHAR" />		
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		school_id,
+		img_ord,
+		filename,
+		filesize,
+		origin_name,
+		ins_date,
+		upd_date
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.CustomerImageEntity" resultMap="school_img">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_IMG_TX
+		WHERE 
+			1 = 1
+			<if test="filename != null and filename != ''">
+				AND filename = #{filename}
+			</if>
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectBySchoolId" parameterType="String" resultMap="school_img">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_IMG_TX
+		WHERE 
+			school_id = #{school_id}
+		ORDER BY IMG_ORD ASC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerImageEntity">
+	    INSERT INTO DS_SCHOOL_IMG_TX 
+	    ( school_id, img_ord, filename, filesize, origin_name, ins_date )
+	    VALUES
+	    ( #{school_id, jdbcType=VARCHAR},
+	    	#{img_ord, jdbcType=VARCHAR},
+	    	#{filename, jdbcType=VARCHAR},
+	    	#{filesize, jdbcType=BIGINT},
+	    	#{origin_name, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerImageEntity">
+		UPDATE DS_SCHOOL_IMG_TX SET 
+			img_ord=#{img_ord, jdbcType=VARCHAR},
+	    	filename=#{filename, jdbcType=VARCHAR},
+	    	filesize=#{filesize, jdbcType=BIGINT},
+	    	origin_name=#{origin_name, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateOrd" parameterType="com.mycompany.myschool.web.entity.customer.CustomerImageEntity">
+		UPDATE DS_SCHOOL_IMG_TX SET 
+			img_ord=img_ord+1;
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_IMG_TX 
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteOne" parameterType="Integer">
+		DELETE FROM DS_SCHOOL_IMG_TX 
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.customer.CustomerImageEntity">
+		DELETE FROM DS_SCHOOL_IMG_TX 
+		WHERE 
+			1 = 1
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+	</delete>
+</mapper>

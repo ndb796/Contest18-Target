@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.base.ZipcodeMapper">
+
+	<resultMap id="zipcode" type="com.mycompany.myschool.web.entity.base.ZipcodeEntity">
+		<id property="publiccode" column="publiccode" jdbcType="VARCHAR" />
+		<id property="oldzipcode" column="oldzipcode" jdbcType="VARCHAR" />
+		<id property="zipcode" column="zipcode" jdbcType="VARCHAR" />
+		<id property="prefecturekana" column="prefecturekana" jdbcType="VARCHAR" />
+		<id property="citykana" column="citykana" jdbcType="VARCHAR" />	
+		<id property="townkana" column="townkana" jdbcType="VARCHAR" />	
+		<id property="prefecture" column="prefecture" jdbcType="VARCHAR" />
+		<id property="city" column="city" jdbcType="VARCHAR" />
+		<id property="town" column="town" jdbcType="VARCHAR" />
+		<id property="towndivideflg" column="towndivideflg" jdbcType="INTEGER" />
+		<id property="koazabanchiflg" column="koazabanchiflg" jdbcType="INTEGER" />
+		<id property="tyoumeflg" column="tyoumeflg" jdbcType="INTEGER" />
+		<id property="hassometownflg" column="hassometownflg" jdbcType="INTEGER" />
+		<id property="updatestate" column="updatestate" jdbcType="INTEGER" />
+		<id property="updatereson" column="updatereson" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="columns">
+		publiccode,
+		oldzipcode,
+		zipcode,
+		prefecturekana,
+		citykana,
+		townkana,
+		prefecture,
+		city,
+		town,
+		 towndivideflg,
+		 koazabanchiflg,
+		 tyoumeflg,
+		 hassometownflg,
+		 updatestate,
+		 updatereson
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.base.ZipcodeEntity" resultMap="zipcode">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			ZIPMASTER
+		WHERE 
+			<if test="prefecture != null and prefecture != '')">
+				AND prefecture = #{prefecture}
+			</if>
+			<if test="city != null and city != '')">
+				AND city = #{city}
+			</if>
+			<if test="town != null and town != '')">
+				AND town = #{town}
+			</if>
+		ORDER BY PUBLICCODE ASC 
+	</select>
+	
+	<select id="selectByZipcode" parameterType="String" resultMap="zipcode">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			ZIPMASTER
+		WHERE 
+			ZIPCODE=#{zipcode}
+	</select>
+	
+</mapper>

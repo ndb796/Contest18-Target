@@ -1,0 +1,33 @@
+{"nodes": 
+	{"East Timor": {"borders": 1, "length": 1}, 
+	 "Afghanistan": {"borders": 1, "length": 1, "region": "South America"}, 
+	 "Hong Kong": {"borders": 1, "length": 1},
+	 "A": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "B": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "C": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "D": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "E": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "F": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "G": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "H": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "I": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"},
+	 "J": {"borders": 19, "length": 1, "link": "www.naver.com", "region": "South America"}
+	}, 
+ "edges": 
+ 	{"Hong Kong": {"East Timor": {}}, 
+ 	 "Afghanistan": {
+ 	  			     "Hong Kong": {},
+ 	  			     "A": {},
+ 	  			     "B": {},
+ 	  			     "C": {},
+ 	  			     "D": {},
+ 	  			     "E": {},
+ 	  			     "F": {},
+ 	  			     "G": {},
+ 	  			     "H": {},
+ 	  			     "I": {},
+ 	  			     "J": {}
+ 	  			     } 	  			     
+	}
+}
+

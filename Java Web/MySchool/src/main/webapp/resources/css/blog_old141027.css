@@ -1,0 +1,392 @@
+/* ==========================================================================
+ *  블로그ページ
+ * ========================================================================== */
+
+/* ******************************
+ *  reset
+ * ****************************** */
+
+h1,h2,h3,h4,p {
+	margin:0;
+	padding:0;
+	text-align:left;
+}
+	
+dl,dt,dd {
+	padding:0;
+	margin:0;
+}
+
+img {
+    border-style:none;
+}
+
+/* ******************************
+ *  header
+ * ****************************** */
+.headerwrap01 {
+	width: 100%;
+	background: #005554;
+	position: fixed;
+	z-index: 10;
+}
+
+.centerfix {
+	width: 960px;
+	margin: 0 auto;
+}
+
+.header_navigation {
+	margin: 0 auto;
+	height: 66px;
+	/*overflow: hidden;*/
+}
+	
+.header_navigation h1 {
+	padding:21px 0 0;
+	float:left;
+	margin: 0;
+}
+
+.header_navigation p {
+	float:left;
+}
+
+.slogan {
+	padding-top: 230px;
+	text-align: center;
+	color: #FFF;
+	text-shadow: 0 0 5px #000;
+	font-size: 55px;
+	font-weight: bold;
+	letter-spacing:3px;
+}
+
+.subSlogan {
+	display: block;
+	font-size: 25px;
+	font-weight: normal;
+}
+	
+.select_language {
+	padding: 26px 30px 0 166px;
+}
+
+.select_language select {
+	background: transparent;
+	border: none;
+	font-size: 14px;
+	margin: 0;
+	font-family: Helvetica !important;
+	height: 23px;
+	line-height: 1;
+}
+
+.select_language .dropdown .selected {
+	color: #FFF;
+}
+
+.select_language .dropdown .carat {
+	background: url(../images/locale/ja/user/pages/search/icon_arrow02.png) center center no-repeat;
+}
+	
+.loginbtn {
+	padding: 24px 24px 0 0;
+}
+	
+.register_btn {
+	padding: 24px 30px 0 0;
+}
+
+.fb{
+	padding: 15px 13px 0 0;
+}
+
+.tw{
+	padding-top: 15px;
+}
+
+/* ******************************
+ *  contents
+ * ****************************** */
+.contents {
+	background: #fcfbd0;
+	padding-top: 66px;
+	margin-bottom: 137px;
+	overflow: hidden;
+}
+
+#bread {
+	overflow: hidden;
+	margin: 18px 0 30px;
+	font-size: 12px;
+	padding: 0;
+}
+
+#bread li {
+	float: left;
+	padding: 0 6px 0 0;
+	color: #005554;
+	list-style: none;
+}
+
+#bread li a {
+	text-decoration: underline;
+	color: #333;
+}
+#bread li a:hover {
+	text-decoration: none;
+}
+
+#bread li span {
+	padding-left: 6px;
+}
+
+.contents_title {
+	font-size: 35px;
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.contents_left {
+	width: 668px;
+	float: left;
+	background: #fff;
+}
+
+.guardian_wrap {
+	overflow: hidden;
+	width: 638px;
+	margin: 0 auto;
+}
+
+.guardian {
+	padding-top: 15px;
+	margin-bottom: 15px;
+	border-bottom: 1px dotted #a8a8a8;
+}
+
+.guardian .title {
+	font-size: 16px;
+	font-weight: normal;
+	padding: 6px 0 0 62px;
+	margin: 0 0 10px 10px;
+	height: 46px;
+}
+
+.guardian .title span {
+	font-size: 12px;
+	color: #666;
+	display: block;
+}
+
+.guardian.boy .title {
+	background: url(../images/locale/ja/user/pages/blog/icon_guardian_01.gif) 0 0 no-repeat;
+}
+
+.guardian.girl .title {
+	background: url(../images/locale/ja/user/pages/blog/icon_guardian_02.gif) 0 0 no-repeat;
+}
+
+.guardian.children .title {
+	background: url(../images/locale/ja/user/pages/blog/icon_guardian_03.gif) 0 0 no-repeat;
+}
+
+.guardian .desc {
+	font-size: 14px;
+	line-height: 1.4;
+	margin-bottom: 10px;
+	margin-left: 72px;
+}
+
+.guardian .name {
+	font-size: 12px;
+	text-align: right;
+	margin-bottom: 10px;
+}
+
+.guardian.boy .name {
+	color: #00b1ea;
+}
+
+.guardian.girl .name {
+	color: #e86fa5;
+}
+
+.guardian.children .name {
+	color: #ea941a;
+}
+
+.pageNav {
+	text-align: center;
+	padding-top: 15px;
+	margin-bottom: 30px;
+	font-size: 15px;
+}
+
+.pageNav span {
+	padding: 0 15px;
+}
+
+.pageNav span a {
+	color: #999999;
+}
+
+.pageNav span a:hover {
+	color: #23ac00;
+}
+
+.pageNav .current {
+	color: #23ac00;
+}
+
+.contents_right {
+	float: right;
+}
+
+.contents_right .btn_blog {
+	margin-bottom: 12px;
+}
+
+.contents_right .new_register {
+	background: #EEE;
+	border: 1px solid #999;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.contents_right .new_register a {
+	background: url(/images/locale/ja/user/pages/blog/icn_arrow.png) right center no-repeat;
+	color: #333333;
+	display: block;
+	font-size: 15px;
+	padding: 12px 0 11px;
+	line-height: 1;
+}
+
+/* ******************************
+ *  modal window
+ * ****************************** */
+#glayLayer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: #000;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+
+#overLayer {
+	position: fixed;
+	background: #FFF;
+	width: 780px;
+	top: 50%;
+	left: 50%;
+	border-radius: 2px;
+	padding: 54px 0 34px;
+	text-align: center;
+}
+
+#overLayer p {
+	text-align: center;
+}
+
+#overLayer .title {
+	font-size: 30px;
+	color: #005554;
+	margin-bottom: 16px;
+}
+
+#overLayer .desc {
+	font-size: 14px;
+	margin-bottom: 40px;
+}
+
+#overLayer .new_register {
+	margin: 0 30px 30px;
+	padding-bottom: 40px;
+	border-bottom: 1px solid #ccc;
+}
+
+#overLayer .login {
+	font-size: 14px;
+}
+
+#overLayer .login a {
+	color: #23ac00;
+	text-decoration: underline;
+}
+
+#overLayer .login a:hover {
+	text-decoration: none;
+}
+
+#overLayer .btn_close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	cursor: pointer;
+}
+
+/* ******************************
+ *  footer
+ * ****************************** */
+footer {
+	background: #F4F4F4;
+	font-size: 12px;
+	text-decoration: none;
+	height: auto;
+}
+
+.go_top_end {
+	padding-top: 10px;
+	text-align: right;
+	line-height: 1;
+	margin-bottom: 28px;
+}
+
+.bottom_contents {
+	background: #005554;
+	width: 100%;
+	overflow: hidden;
+	padding-top: 50px;
+	padding-bottom: 60px;
+}
+
+.bottomInner {
+	width: 960px;
+	margin: 0 auto;
+}
+
+.navigation_area {
+	padding-top: 8px;
+	float: left;
+	background: #005554;
+}
+
+.navigation_area p {
+	font-size: 12px;
+	padding-bottom: 30px;
+	padding-left: 0;
+	color: #fff;
+}
+
+.navigation_area p a {
+	color: #fff;
+}
+
+.navigation_area .copyright {
+	color: #fff;
+	font-size: 11px;
+	font-family: "Helvetica Neue";
+	padding-bottom: 0;
+}
+
+.logo_area {
+	padding-top: 0;
+	background: #005554;
+	float: right;
+}
+

@@ -1,0 +1,75 @@
+
+body {
+background:#FDF6CA;
+padding:0;
+margin:0;
+
+}
+
+h1 {
+font-weight: bold;
+padding:0;
+margin:0;
+}
+
+
+.top_ttl h1 {
+text-align:center;
+background:#F0006B;
+height:43px;
+}
+
+
+.main_login{
+background:#FFF;
+border:solid 1px #CCC;
+margin:10px 10px 10px 10px;
+position: relative;
+padding:8px;
+border-radius: 0.3em;
+}
+
+.main_login h1{
+padding-top:20px;
+padding-bottom:20px;
+text-align:center;
+
+}
+
+.main_login p {
+
+margin:0;
+text-align:center;
+
+}
+
+.message01{
+padding-top:25px;
+}
+
+.about_deviewstory{
+padding-top:20px;
+padding-bottom:130px;
+}
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------*/
+
+
+.ui-footer {
+	text-align: center;
+}
+.ui-footer a {
+	color: #FFF;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+.color1 {
+	color: #F00;
+}
+
+

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.student.StudentMapper">
+
+	<resultMap id="student" type="com.mycompany.myschool.web.entity.student.StudentEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="fname" column="fname" jdbcType="VARCHAR" />
+		<id property="lname" column="lname" jdbcType="VARCHAR" />
+		<id property="location" column="location" jdbcType="VARCHAR" />
+		<id property="gender" column="gender" jdbcType="VARCHAR" />
+		<id property="current_type" column="current_type" jdbcType="INTEGER" />
+		<id property="filename" column="filename" jdbcType="VARCHAR" />
+		<id property="filesize" column="filesize" jdbcType="BIGINT" />
+		<id property="rcmmd_type" column="rcmmd_type" jdbcType="INTEGER" />
+		<id property="zipcode" column="zipcode" jdbcType="VARCHAR" />
+		<id property="address1" column="address1" jdbcType="VARCHAR" />
+		<id property="address2" column="address2" jdbcType="VARCHAR" />
+		<id property="address3" column="address3" jdbcType="VARCHAR" />
+		<id property="address4" column="address4" jdbcType="VARCHAR" />
+		<id property="birth_y" column="birth_y" jdbcType="VARCHAR" />
+		<id property="birth_m" column="birth_m" jdbcType="VARCHAR" />
+		<id property="birth_d" column="birth_d" jdbcType="VARCHAR" />
+		<id property="remarks" column="remarks" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="ins_date_str" column="ins_date_str" jdbcType="VARCHAR" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+		<id property="del_date" column="del_date" jdbcType="TIMESTAMP" />
+		<id property="del_flg" column="del_flg" jdbcType="INTEGER" />		
+	</resultMap>
+
+	<sql id="columns">
+		IDX,
+		STUDENT_ID,
+		FNAME,
+		LNAME,
+		LOCATION,
+		GENDER,
+		FILENAME,
+		FILESIZE,
+		RCMMD_TYPE,
+		ZIPCODE,
+		ADDRESS1,
+		ADDRESS2,
+		ADDRESS3,
+		ADDRESS4,
+		BIRTH_Y,
+		BIRTH_M,
+		BIRTH_D,
+		REMARKS,
+		INS_DATE,
+		UPD_DATE,
+		DATE_FORMAT(INS_DATE, '%Y-%M-%D %H:%I:%S') AS INS_DATE_STR,
+		DATE_FORMAT(UPD_DATE, '%Y-%M-%D %H:%I:%S') AS UPD_DATE_STR,
+		DEL_DATE,
+		DEL_FLG		
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(STUDENT_ID) 
+		FROM
+			DS_STUDENT_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.student.StudentEntity" resultMap="student">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_STUDENT_TX
+		WHERE 
+			(DEL_FLG IS NULL OR DEL_FLG = 0) 
+			<if test="(fname != null and fname != '') or (lname != null and lname != '')">
+				AND (fname like #{fname} or lname like #{lname})
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.student.StudentEntity" resultMap="student">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_STUDENT_TX
+		WHERE 
+			(DEL_FLG IS NULL OR DEL_FLG = 0) 
+			<if test="(fname != null and fname != '') or (lname != null and lname != '')">
+				AND (fname like #{fname} or lname like #{lname})
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByStudentId" parameterType="String" resultMap="student">
+		SELECT
+			<include refid="columns"/>,
+			(SELECT CUR_SCHOOL_TYPE1 FROM DS_STUDENT_SUB1_TX WHERE STUDENT_ID = S.STUDENT_ID) AS CURRENT_TYPE
+		FROM
+			DS_STUDENT_TX S
+		WHERE 
+			student_id = #{student_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.student.StudentEntity">
+	    INSERT INTO DS_STUDENT_TX 
+	    ( student_id, fname, lname, location, 
+	      gender, current_type, filename, filesize, rcmmd_type, zipcode, address1,
+	      address2, address3, address4, birth_y, birth_m, birth_d, ins_date )
+	    VALUES
+	    ( #{student_id, jdbcType=VARCHAR},
+	    	#{fname, jdbcType=VARCHAR},
+	    	#{lname, jdbcType=VARCHAR},
+	    	#{location, jdbcType=VARCHAR},
+	    	#{gender, jdbcType=VARCHAR},
+	    	#{current_type, jdbcType=VARCHAR},
+	    	#{filename, jdbcType=VARCHAR},
+	    	#{filesize, jdbcType=BIGINT},
+	    	#{rcmmd_type, jdbcType=INTEGER},
+	    	#{zipcode, jdbcType=VARCHAR},
+	    	#{address1, jdbcType=VARCHAR},
+	    	#{address2, jdbcType=VARCHAR},
+	    	#{address3, jdbcType=VARCHAR},
+	    	#{address4, jdbcType=VARCHAR},
+	    	#{birth_y, jdbcType=VARCHAR},
+	    	#{birth_m, jdbcType=VARCHAR},
+	    	#{birth_d, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.student.StudentEntity">
+		UPDATE DS_STUDENT_TX SET 
+			fname=#{fname, jdbcType=VARCHAR},
+			lname=#{lname, jdbcType=VARCHAR},
+			location=#{location, jdbcType=VARCHAR},
+			gender=#{gender, jdbcType=VARCHAR},
+			current_type=#{current_type, jdbcType=VARCHAR},
+			<if test="filename != null and filename != ''">
+	    	filename=#{filename, jdbcType=VARCHAR},
+	    	filesize=#{filesize, jdbcType=BIGINT},
+	    	</if>
+	    	rcmmd_type=#{rcmmd_type, jdbcType=INTEGER},
+	    	zipcode=#{zipcode, jdbcType=VARCHAR},
+	    	address1=#{address1, jdbcType=VARCHAR},
+	    	address2=#{address2, jdbcType=VARCHAR},
+	    	address3=#{address3, jdbcType=VARCHAR},
+	    	address4=#{address4, jdbcType=VARCHAR},
+	    	birth_y=#{birth_y, jdbcType=VARCHAR},
+	    	birth_m=#{birth_m, jdbcType=VARCHAR},
+	    	birth_d=#{birth_d, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			student_id=#{student_id, jdbcType=VARCHAR}
+	</update>
+	
+	<!-- <update id="updateStatus" parameterType="com.mycompany.myschool.web.entity.student.StudentEntity">
+		UPDATE DS_STUDENT_TX SET user_status=#{user_status, jdbcType=INTEGER}, upd_date=NOW() WHERE email=#{email, jdbcType=VARCHAR}
+	</update> -->
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_STUDENT_TX 
+		WHERE 
+			(IS_DELETED IS NULL OR IS_DELETED = 0) 
+			<if test="student_id != null and student_id != ''">
+				AND student_id=#{student_id, jdbcType=VARCHAR}
+			</if>
+	</delete>
+	
+	<!-- <delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.student.StudentEntity">
+		DELETE FROM DS_STUDENT_TX 
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="userEmailArray != null">
+				AND email IN (
+					<foreach collection="userEmailArray" item="userEmailArray" separator=",">#{email}</foreach>
+				)
+			</if>
+		</trim>
+	</delete> -->
+	
+	<select id="countStudentThisWeek" parameterType="hashmap" resultType="Integer">
+		SELECT 	COUNT(*) AS studentCnt
+		FROM 	DS_STUDENT_TX
+		WHERE 	(DEL_FLG IS NULL OR DEL_FLG = 0) AND DATE_FORMAT(INS_DATE, '%Y-%m-%d') BETWEEN #{startD} AND #{endD}
+	</select>
+	
+	<select id="selectNewStudent" resultType="com.mycompany.myschool.web.entity.admin.MainEntity">
+		SELECT
+			(SELECT DATE_FORMAT(INS_DATE, '%m-%d %h:%i') FROM DS_STUDENT_TX ORDER BY IDX DESC LIMIT 0, 1) AS newStudent1,
+			DATE_FORMAT(TIMEDIFF(NOW(), (SELECT INS_DATE FROM DS_STUDENT_TX ORDER BY IDX DESC LIMIT 0, 1)), '%H:%i') AS newStudent2
+		FROM DUAL
+	</select>
+</mapper>

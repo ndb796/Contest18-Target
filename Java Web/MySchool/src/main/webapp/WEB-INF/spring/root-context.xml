@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+    xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans 	http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 	http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx 		http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+	<context:annotation-config/>
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/myschool?autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=false" />
+		<property name="username" value="root" />
+		<property name="password" value="mysql" />
+	</bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	
+	<!-- Openapi resolver S -->
+	<!-- Openapi resolver E -->
+	
+	<!-- mybatis -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/mycompany/myschool/web/persistent/xml/*.xml"/>
+	</bean>
+	
+	<!-- Mapper bean -->
+	<!-- base -->
+	<bean id="accessCountMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.base.AccessCountMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.base.UserMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="zipcodeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.base.ZipcodeMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- board -->
+	<bean id="eventMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.board.EventMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="scheduleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.board.ScheduleMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="newsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.board.NewsMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- common -->
+	<bean id="codeMstMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.common.CodeMstMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="searchMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.common.SearchMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="specificMstMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.common.SpecificMstMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="statisticsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.common.StatisticsMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- customer -->
+	<bean id="customerBranchMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerBranchMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerCoursesMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerCoursesMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerImageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerImageMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerKeyMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerKeyMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerRefMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerRefMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerDetailMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerSub1Mapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="customerChargerMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.CustomerSub2Mapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="viewCountMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.customer.ViewCountMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- sns -->
+	<bean id="blogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.BlogMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="boardMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.BoardMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="commentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.CommentMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="emotionMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.EmotionMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="groupMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.GroupMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="mediaMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.MediaMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="myGroupMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.MyGroupMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="snsConsultMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.sns.SnsConsultMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	
+	<!-- student -->
+	<bean id="favoriteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.student.FavoriteMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="recommendMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.student.RecommendMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="studentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.student.StudentMapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="curSchoolMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.student.StudentSub1Mapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="specificMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.mycompany.myschool.web.persistent.mapper.student.StudentSub2Mapper" />
+		<property name="sqlSessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

@@ -1,0 +1,450 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+h1,h2,h4,p{
+	margin:0;
+	padding:0;
+	}
+	
+ul li {
+	list-style:none;
+	margin:0;
+	padding:0;
+	}
+
+.header_cover{
+	background:#005554;
+	width:100%;
+	height:70px;
+	}
+
+.header_menu{
+	margin:0 auto;
+	background:#005554;
+	width:930px;
+	height:70px;
+	}
+
+.header_menu .btn_pulldow{
+	clear:both;
+	display:block;
+	text-align:center;
+	}
+
+.leftarea{
+	padding-top:15px;
+	float:left;
+	}
+	
+.rightarea{
+	float:right;
+	padding-right:50px;
+	padding-top:25px;
+	}
+	
+.logout{
+	float:right;
+	}
+
+
+.main_contents{
+	margin-top:0;
+	padding-top:0;
+	margin-bottom:52px;
+	}
+	
+.main_contents p{
+	font-size:12px;
+	padding-bottom:20px;
+	}
+	
+.navigation_btn ul li {
+	float:left;
+	padding-right:52px;
+	}
+	
+.navigation_btn ul{
+	width:930px;
+	height:120px;
+	background:#FFF;
+	}
+	
+.navigation_btn{
+	width:900px;
+	margin:0 auto;
+	padding-top:50px;
+	padding-bottom:30px;
+	}
+
+ul,td{
+	margin:0;
+	padding:0;
+}
+
+
+
+.layout_fix{
+	clear:both;
+	}
+
+
+.form_area{
+	margin-bottom:40px;
+	}
+	
+.topic{
+	background:#FFF;
+	}
+	
+.form_fix1 {
+	height:25px;
+	width:160px;
+	}
+.form_fix2 {
+	height:25px;
+	width:550px;
+	}
+	
+
+	
+.item{
+	padding-left:5px;
+	}
+	
+.form_area a{
+	color:#099;
+	text-decoration:underline;
+	}
+.notice{
+	font-size:11px;
+	}
+	
+.notice_txt{
+	font-size:12px;
+	text-align:left;
+	padding-left:80px;
+	}
+	
+.register_btn{
+	padding-top:40px;
+	padding-bottom:60px;
+	}
+	
+.form_box{
+	clear:both;
+	margin: 0 auto;
+	width:898px;
+	height: 720px;
+	border:solid 1px #CCC;
+	background:#fafafc;
+	}
+	
+
+
+	
+.tab_area {
+	margin: 0 auto;
+	width:900px;
+	}	
+	
+.tab_area ul li {
+	float:left;
+	margin:0;
+	padding:0;
+	height:50px;
+	padding-right:10px;
+	}
+	
+
+	
+
+	
+
+	
+.form_fix3 {
+	height:25px;
+	width:300px;
+	}
+	
+
+
+
+
+ul.pageNav03 {
+	/zoom: 1;
+	overflow: hidden;
+	margin: 0 0 10px;
+	padding: 10px;
+}
+
+ul.pageNav03 li {
+	float: left;
+	margin: 0 1px 1px 0;
+}
+
+ul.pageNav03 li span,
+ul.pageNav03 li a {
+	float: left;
+	padding: 5px 10px;
+}
+
+ul.pageNav03 li a:hover {
+	background: #ffc;
+}
+
+.pagenation ul{
+	clear:both;
+	padding-left:380px;
+	padding-bottom:40px;
+	}
+
+
+
+
+	
+.layout_fix2{
+	clear:both;
+	margin:0;
+	}
+
+
+.rightarea2,
+.leftarea2{
+	text-align:left;
+	}
+	
+	
+.leftarea2{
+	width:300px;
+	height:100%
+	float:left;
+	}
+	
+.rightarea2{
+	width:500px;
+	height:100%;
+	float:left;
+	}
+	
+/*        */
+
+
+
+	
+.layout_fix02{
+	clear:both;
+	display:block;
+	margin-bottom:28px;
+	}
+	
+
+
+
+
+.schedule_cover{
+	margin-left:28px;
+	margin-top:30px;
+	background:#FFF;
+	padding:20px;
+	width:800px;
+	}
+
+
+
+
+
+
+
+
+
+
+/* schedule_month.html カレンダー内の装飾*/
+
+
+.schedule_btn p{
+	float:left;
+	padding-right:8px;
+	font-size:15px;
+	}
+	
+.month{
+	padding-top:2px;
+	}
+	
+.schedule_btn .select_schedule{
+	float:right;
+	}
+
+
+.schedule_month table {
+	clear:both;
+	border-collapse: collapse;
+	background:#FFF;
+	width:100%;
+}
+
+.schedule_month td{
+	border:solid 1px #CCC;
+	height:100px;
+	width:100px;
+	vertical-align:top;
+	padding-left:5px;
+	padding-top:2px;
+	font-size:12px;
+}
+.schedule_month th{
+	font-size:10pt;
+	font-weight:normal;
+	text-align:left;
+	color:#666;
+}
+
+
+#event{
+	background:#C3F6A7;
+	border:solid 2px #8CCD7A;
+}
+
+.sunday{
+	color:#D00;
+}
+
+
+/* 先月と来月の日にちの色を薄くする*/
+.pre_m,
+.next_m{
+	color:#888;
+}
+
+
+
+
+.event01{
+	background:#C3F6A7;
+	border:solid 2px #8CCD7A;
+	display:block;
+	margin:0;
+	padding:0;
+	}
+	
+.event02{
+	background:#3FC;
+	border:solid 2px #0CC;
+	display:block;
+	margin:0;
+	padding:0;
+	}
+	
+.schedule_month .event_date{
+	margin:0;
+	padding:0;
+	}
+	
+.date {
+	display:block;
+	padding-left:4px;
+	padding-top:2px;
+	}
+	
+/* schedule_day.html カレンダー内の装飾*/
+
+
+
+.schedule_day table {
+	clear:both;
+	border-collapse: collapse;
+	background:#FFF;
+	width:100%;
+	border-top:#CCC solid 1px;
+}
+
+.schedule_day td{
+	/*border:solid 1px #CCC;*/
+	border-right:solid 1px #CCC;
+
+	vertical-align:top;
+	padding-left:5px;
+	padding-top:2px;
+	font-size:12px;
+}
+.schedule_day th{
+	border:solid 1px #CCC;
+	font-size:10pt;
+	width:120px;
+	font-weight:normal;
+	text-align:left;
+	vertical-align:text-top;
+	padding-left:3px;
+	color:#666;
+}
+
+.center_border{
+	border-top:#CCC dotted 1px;
+	border-bottom:#CCC  solid 1px;
+	border-right:#CCC  solid 1px ;
+	}
+.event_date{
+	height:40px;
+	}	
+
+.event{
+	background:#C3F6A7;
+	padding-right:3px;
+	border:solid 2px #8CCD7A!important;
+}
+
+.event2{
+	background: #8ADCFF;
+	padding-right:3px;
+	border:solid 2px #0099FF!important;
+}
+
+.event3{
+	background: #0000EA;
+	padding-right:3px;
+	border:solid 2px #0000A6!important;
+}
+
+.event4{
+	background: #F0F;
+	padding-right:3px;
+	border:solid 2px #CA00CA!important;
+}
+
+.event5{
+	background:#F00;
+	padding-right:3px;
+	border:solid 2px #DB0000!important;
+}
+
+.event6{
+	background: #F90;
+	padding-right:3px;
+	border:solid 2px #E87400!important;
+}
+
+.schedule_day .day{
+	clear:both;
+	margin-top:40px;
+	font-size:14px;
+	color:#666;
+	text-align:center;
+	}
+	
+/* schedule_week.html カレンダー内の装飾*/
+	
+.week{
+	text-align:center!important;
+	border-left:none !important;
+	border-right:none !important;
+	border-top:#FFF solid 1px !important;
+	}
+	
+.weekend{
+	text-align:center!important;
+	border-left:none !important;
+	border-right:none !important;
+	border-top:#FFF solid 1px !important;
+	color:#D00!important;
+	}

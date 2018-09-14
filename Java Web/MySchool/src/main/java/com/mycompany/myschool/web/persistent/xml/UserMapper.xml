@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.base.UserMapper">
+
+	<resultMap id="user" type="com.mycompany.myschool.web.entity.base.UserEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="user_id" column="user_id" jdbcType="VARCHAR" />
+		<id property="email" column="email" jdbcType="VARCHAR" />
+		<id property="pwd" column="pwd" jdbcType="VARCHAR" />
+		<id property="join_type" column="join_type" jdbcType="INTEGER" />	
+		<id property="mem_type" column="mem_type" jdbcType="INTEGER" />	
+		<id property="reg_status" column="reg_status" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+		<id property="last_login_date" column="last_login_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		user_id,
+		email, 
+		pwd,
+		join_type,
+		mem_type,
+		reg_status,
+		upd_date,
+		DATE_FORMAT(UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR,
+		last_login_date	
+	</sql>
+	
+	<select id="selectMaxId" parameterType="map" resultType="String">
+		SELECT
+			MAX(USER_ID) 
+		FROM
+			DS_USER_TX
+		WHERE 
+			USER_ID like #{keyword}%
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.base.UserEntity" resultMap="user">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_TX
+		WHERE 
+			(DEL_FLG = 0) 
+			<if test="join_type != null and join_type != ''">
+				AND join_type = #{join_type}
+			</if>
+			<if test="mem_type != null and mem_type != ''">
+				AND mem_type = #{mem_type}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByUserId" parameterType="String" resultMap="user">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_TX
+		WHERE 
+			(DEL_FLG = 0) AND user_id = #{user_id}
+	</select>
+	
+	<select id="selectByLogin" parameterType="String" resultMap="user">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_TX
+		WHERE
+			(DEL_FLG = 0) AND email = #{email, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.base.UserEntity">
+	    INSERT INTO DS_USER_TX 
+	    ( user_id, email, pwd, join_type, mem_type, reg_status, upd_date )
+	    VALUES
+	    ( #{user_id, jdbcType=VARCHAR},
+	    	#{email, jdbcType=VARCHAR},
+	    	#{pwd, jdbcType=VARCHAR},
+	    	#{join_type, jdbcType=INTEGER},
+	    	#{mem_type, jdbcType=INTEGER},
+	    	#{reg_status, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.base.UserEntity">
+		UPDATE DS_USER_TX SET 
+			pwd=#{pwd, jdbcType=VARCHAR},
+			join_type=#{join_type, jdbcType=INTEGER},
+			mem_type=#{mem_type, jdbcType=INTEGER},
+	    	upd_date=NOW()
+		WHERE 
+			email=#{email, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateByUserId" parameterType="com.mycompany.myschool.web.entity.base.UserEntity">
+		UPDATE DS_USER_TX SET 
+			<!-- pwd=#{pwd, jdbcType=VARCHAR}, -->
+			email=#{email, jdbcType=VARCHAR},
+			join_type=#{join_type, jdbcType=INTEGER},
+			mem_type=#{mem_type, jdbcType=INTEGER},
+			upd_id=#{upd_id, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			user_id=#{user_id, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateStatus" parameterType="com.mycompany.myschool.web.entity.base.UserEntity">
+		UPDATE DS_USER_TX SET reg_status=#{reg_status, jdbcType=VARCHAR}, upd_date=NOW() WHERE email=#{email, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="hashmap">
+		UPDATE DS_USER_TX SET DEL_FLG = 1, UPD_ID = #{upd_id}, UPD_DATE = NOW() 
+		WHERE 
+			user_id=#{user_id, jdbcType=VARCHAR}
+	</delete>
+</mapper>

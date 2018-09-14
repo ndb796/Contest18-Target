@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.common.SpecificMstMapper">
+
+	<resultMap id="specific_mst" type="com.mycompany.myschool.web.entity.common.SpecificMstEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="country" column="country" jdbcType="VARCHAR" />
+		<id property="category" column="category" jdbcType="VARCHAR" />
+		<id property="code" column="code" jdbcType="VARCHAR" />
+		<id property="type1" column="type1" jdbcType="VARCHAR" />
+		<id property="type2" column="type2" jdbcType="VARCHAR" />
+		<id property="type3" column="type3" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		country,
+		category,
+		code,
+		type1,
+		type2,
+		type3
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.common.SpecificMstEntity" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			1 = 1
+			<if test="country != null and country != ''">
+				AND country = #{country}
+			</if>
+			<if test="category != null and category != ''">
+				AND category = #{category}
+			</if>
+			<if test="code != null and code != ''">
+				AND code = #{code}
+			</if>
+			<if test="type1 != null and type1 != ''">
+				AND type1 = #{type1}
+			</if>
+			<if test="type2 != null and type2 != ''">
+				AND type2 = #{type2}
+			</if>
+			<if test="type3 != null and type3 != ''">
+				AND type3 = #{type3}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByCountry" parameterType="String" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			country = #{country}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByCategory" parameterType="String" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			category = #{category}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByCode" parameterType="String" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			code = #{code}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByType1" parameterType="String" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			type1 = #{type1}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByType2" parameterType="String" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			type2 = #{type2}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByType3" parameterType="String" resultMap="specific_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_USER_SPEC_MST
+		WHERE 
+			type3 = #{type3}
+		ORDER BY IDX DESC 
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.common.SpecificMstEntity">
+	    INSERT INTO DS_USER_SPEC_MST 
+	    ( country, category, code, type1, type2, type3 )
+	    VALUES
+	    ( <!-- SEQ_USER_IDX.NEXTVAL,  -->
+	    	#{country, jdbcType=VARCHAR},
+	    	#{category, jdbcType=VARCHAR},
+	    	#{code, jdbcType=VARCHAR},
+	    	#{type1, jdbcType=VARCHAR},
+	    	#{type2, jdbcType=VARCHAR},
+	    	#{type3, jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.common.SpecificMstEntity">
+		UPDATE DS_USER_SPEC_MST SET 
+			country=#{country, jdbcType=VARCHAR},
+	    	category=#{category, jdbcType=VARCHAR},
+	    	type1=#{type1, jdbcType=VARCHAR},
+	    	type2=#{type2, jdbcType=VARCHAR},
+	    	type3=#{type3, jdbcType=VARCHAR}
+		WHERE 
+			code=#{code, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_USER_SPEC_MST 
+		WHERE 
+			code=#{code, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.common.SpecificMstEntity">
+		DELETE FROM DS_USER_SPEC_MST 
+		WHERE 
+			1 = 1
+			<if test="country != null and country != ''">
+				AND country = #{country}
+			</if>
+			<if test="category != null and category != ''">
+				AND category = #{category}
+			</if>
+	</delete>
+</mapper>

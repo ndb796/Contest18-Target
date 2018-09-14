@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerRefMapper">
+
+	<resultMap id="customer_ref" type="com.mycompany.myschool.web.entity.customer.CustomerRefEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="filename1" column="filename1" jdbcType="VARCHAR" />
+		<id property="filesize1" column="filesize1" jdbcType="BIGINT" />
+		<id property="filetype1" column="filetype1" jdbcType="TINYINT" />
+		<id property="downcnt1" column="downcnt1" jdbcType="INTEGER" />
+		<id property="filename2" column="filename2" jdbcType="VARCHAR" />
+		<id property="filesize2" column="filesize2" jdbcType="BIGINT" />
+		<id property="filetype2" column="filetype2" jdbcType="TINYINT" />
+		<id property="downcnt2" column="downcnt2" jdbcType="INTEGER" />
+		<id property="filename3" column="filename3" jdbcType="VARCHAR" />
+		<id property="filesize3" column="filesize3" jdbcType="BIGINT" />
+		<id property="filetype3" column="filetype3" jdbcType="TINYINT" />
+		<id property="downcnt3" column="downcnt3" jdbcType="INTEGER" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		sb_id,
+		filename1,
+		filesize1,
+		filetype1,
+		downcnt1,
+		filename2,
+		filesize2,
+		filetype2,
+		downcnt2,
+		filename3,
+		filesize3,
+		filetype3,
+		downcnt3,
+		upd_date
+	</sql>
+
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.CustomerRefEntity" resultMap="customer_ref">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_REF_TX
+		WHERE 
+			1 = 1
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="customer_ref">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_REF_TX
+		WHERE 
+			sb_id = #{sb_id}
+	</select>
+
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerRefEntity">
+	    INSERT INTO DS_SCHOOL_REF_TX 
+	    ( sb_id, filename1, filesize1, filetype1, downcnt1,
+			filename2, filesize2, filetype2, downcnt2,
+			filename3, filesize3, filetype3, downcnt3,
+			upd_date)
+	    VALUES
+	    ( #{sb_id, jdbcType=VARCHAR},
+	    	#{filename1, jdbcType=VARCHAR},
+			#{filesize1, jdbcType=BIGINT},
+			#{filetype1, jdbcType=INTEGER},
+			#{downcnt1, jdbcType=INTEGER},
+			#{filename2, jdbcType=VARCHAR},
+			#{filesize2, jdbcType=BIGINT},
+			#{filetype2, jdbcType=INTEGER},
+			#{downcnt2, jdbcType=INTEGER},
+			#{filename3, jdbcType=VARCHAR},
+			#{filesize3, jdbcType=BIGINT},
+			#{filetype3, jdbcType=INTEGER},
+			#{downcnt3, jdbcType=INTEGER},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerRefEntity">
+		UPDATE DS_SCHOOL_REF_TX SET 
+			filename1=#{filename1, jdbcType=VARCHAR},
+			filesize1=#{filesize1, jdbcType=BIGINT},
+			filetype1=#{filetype1, jdbcType=INTEGER},
+			downcnt1=#{downcnt1, jdbcType=INTEGER},
+			filename2=#{filename2, jdbcType=VARCHAR},
+			filesize2=#{filesize2, jdbcType=BIGINT},
+			filetype2=#{filetype2, jdbcType=INTEGER},
+			downcnt2=#{downcnt2, jdbcType=INTEGER},
+			filename3=#{filename3, jdbcType=VARCHAR},
+			filesize3=#{filesize3, jdbcType=BIGINT},
+			filetype3=#{filetype3, jdbcType=INTEGER},
+			downcnt3=#{downcnt3, jdbcType=INTEGER},
+	    	upd_date=NOW()
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_REF_TX 
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.customer.CustomerRefEntity">
+		DELETE FROM DS_SCHOOL_REF_TX 
+		WHERE 
+			1 = 1
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+	</delete>
+</mapper>

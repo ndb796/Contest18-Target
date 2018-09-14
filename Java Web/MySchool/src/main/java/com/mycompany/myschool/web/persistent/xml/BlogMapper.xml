@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.BlogMapper">
+
+	<resultMap id="blog" type="com.mycompany.myschool.web.entity.sns.BlogEntity">
+		<id property="no" column="no" jdbcType="INTEGER" />
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="blog_type" column="blog_type" jdbcType="INTEGER" />
+		<id property="show_flg" column="show_flg" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="title" column="title" jdbcType="VARCHAR" />
+		<id property="contents" column="contents" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+		<id property="upd_id" column="upd_id" jdbcType="VARCHAR" />
+		<id property="del_date" column="del_date" jdbcType="TIMESTAMP" />
+		<id property="del_flg" column="del_flg" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="blogVo" type="com.mycompany.myschool.web.entity.vo.BlogVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="blog_type" column="blog_type" jdbcType="INTEGER" />
+		<id property="show_flg" column="show_flg" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="title" column="title" jdbcType="VARCHAR" />
+		<id property="contents" column="contents" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+		<id property="gender" column="gender" jdbcType="VARCHAR" />
+		<id property="name" column="name" jdbcType="VARCHAR" />
+		<id property="current_type" column="current_type" jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.BlogEntity" resultMap="blogVo">
+		SELECT @ROWNUM := @ROWNUM + 1 AS NO, B.IDX, B.STUDENT_ID, BLOG_TYPE, SCHOOL_ID, TITLE, CONTENTS, SHOW_FLG, 
+			   DATE_FORMAT(B.UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR, CONCAT(S.LNAME, ' ', S.FNAME) AS NAME, S.GENDER, 
+			   S.CURRENT_TYPE
+		FROM DS_BLOG_TX B join DS_STUDENT_TX S ON B.STUDENT_ID = S.STUDENT_ID JOIN (SELECT @ROWNUM := 0) R
+		WHERE (B.DEL_FLG = 0)
+		<if test="show_flg != null and show_flg != ''">
+			AND B.SHOW_FLG = #{show_flg}
+		</if>
+		<if test="student_id != null and student_id != ''">
+			AND B.STUDENT_ID = #{student_id}
+		</if>
+		<if test="school_id != null and school_id != ''">
+			AND B.SCHOOL_ID = #{school_id}
+		</if>
+		ORDER BY B.IDX DESC 
+		<if test="rows_per_page != null and rows_per_page != ''">
+		LIMIT 0, #{rows_per_page}
+		</if>
+	</select>
+	
+	<select id="selectPaging" parameterType="com.mycompany.myschool.web.entity.sns.BlogEntity" resultMap="blogVo">
+		SELECT B.IDX, B.STUDENT_ID, BLOG_TYPE, SCHOOL_ID, TITLE, CONTENTS, SHOW_FLG, 
+			   DATE_FORMAT(B.UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR, CONCAT(S.LNAME, ' ', S.FNAME) AS NAME, S.GENDER, S.CURRENT_TYPE 
+		FROM DS_BLOG_TX B join DS_STUDENT_TX S ON B.STUDENT_ID = S.STUDENT_ID
+		WHERE (B.DEL_FLG = 0)
+		<if test="show_flg != null and show_flg != ''">
+			AND B.SHOW_FLG = #{show_flg}
+		</if>
+		<if test="student_id != null and student_id != ''">
+			AND B.STUDENT_ID = #{student_id}
+		</if>
+		<if test="school_id != null and school_id != ''">
+			AND B.SCHOOL_ID = #{school_id}
+		</if>
+		<if test="txt_search != null and txt_search != ''">
+			AND (TITLE LIKE '%${txt_search}%' OR CONTENTS LIKE '%${txt_search}%')
+		</if>
+		ORDER BY B.IDX DESC 
+		LIMIT #{startPage}, 10
+	</select>
+	
+	<select id="selectForList" parameterType="hashmap" resultMap="blogVo">
+		SELECT B.IDX, B.STUDENT_ID, BLOG_TYPE, SCHOOL_ID, TITLE, CONTENTS, 
+			   DATE_FORMAT(B.UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR, CONCAT(S.LNAME, ' ', S.FNAME) AS NAME, S.GENDER, S.CURRENT_TYPE 
+		FROM DS_BLOG_TX B join DS_STUDENT_TX S ON B.STUDENT_ID = S.STUDENT_ID
+		WHERE (B.DEL_FLG = 0)
+		<if test="show_flg != null and show_flg != ''">
+			AND B.SHOW_FLG = #{show_flg}
+		</if>
+		ORDER BY B.IDX DESC 
+		LIMIT #{startRow}, 5
+	</select>
+	
+	<select id="countForList" parameterType="hashmap" resultType="Integer">
+		SELECT COUNT(B.IDX) 
+		FROM DS_BLOG_TX B join DS_STUDENT_TX S ON B.STUDENT_ID = S.STUDENT_ID
+		<if test="show_flg != null and show_flg != ''">
+			AND B.SHOW_FLG = #{show_flg}
+		</if>
+		WHERE (B.DEL_FLG = 0)
+	</select>
+	
+	<select id="selectOne" parameterType="hashmap" resultMap="blogVo">
+		SELECT B.IDX, B.STUDENT_ID, BLOG_TYPE, SCHOOL_ID, TITLE, CONTENTS, B.SHOW_FLG, 
+			   DATE_FORMAT(B.UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR, CONCAT(S.LNAME, ' ', S.FNAME) AS NAME, S.GENDER, S.CURRENT_TYPE 
+		FROM DS_BLOG_TX B join DS_STUDENT_TX S ON B.STUDENT_ID = S.STUDENT_ID
+		WHERE B.IDX = #{idx}
+	</select>
+
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.BlogEntity" useGeneratedKeys="true" keyProperty="idx">
+	    INSERT INTO DS_BLOG_TX 
+	    ( STUDENT_ID, BLOG_TYPE, SCHOOL_ID, TITLE, CONTENTS, SHOW_FLG, UPD_DATE, UPD_ID )
+	    VALUES
+	    ( #{student_id, jdbcType=VARCHAR},
+	    	#{blog_type, jdbcType=INTEGER},
+	    	#{school_id, jdbcType=VARCHAR},
+	    	#{title, jdbcType=VARCHAR},
+	    	#{contents, jdbcType=VARCHAR},
+	    	#{show_flg, jdbcType=INTEGER},
+	    	NOW(), 
+	    	#{upd_id, jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.sns.BlogEntity">
+		UPDATE DS_BLOG_TX SET 
+			student_id=#{student_id, jdbcType=VARCHAR},
+			show_flg=#{show_flg, jdbcType=INTEGER},
+	    	title=#{title, jdbcType=VARCHAR},
+	    	contents=#{contents, jdbcType=VARCHAR},
+	    	upd_id=#{upd_id, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="delete" parameterType="com.mycompany.myschool.web.entity.sns.BlogEntity">
+		UPDATE DS_BLOG_TX SET DEL_FLG=1, DEL_DATE=NOW()
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<if test="idxsArray != null">
+			AND IDX IN (
+				<foreach collection="idxsArray" item="idx" separator=",">#{idx}</foreach>
+			)
+		</if>
+		</trim>
+	</delete>
+	
+	<delete id="deleteOne" parameterType="Integer">
+		UPDATE DS_BLOG_TX SET DEL_FLG=1, DEL_DATE=NOW(), UPD_ID='ADMIN' WHERE IDX = #{idx}
+	</delete>
+	
+	<select id="selectWeekDate" resultType="com.mycompany.myschool.web.entity.admin.MainEntity">
+		SELECT 
+			DATE_ADD(CURRENT_DATE, INTERVAL (DAYOFWEEK(CURRENT_DATE) - 1) * -1 DAY) AS startD,
+			DATE_ADD(CURRENT_DATE, INTERVAL (7 - DAYOFWEEK(CURRENT_DATE)) DAY) AS endD 
+		FROM DUAL;
+	</select>
+	
+	<select id="countBlogThisWeek" parameterType="hashmap" resultType="Integer">
+		SELECT 	COUNT(*) AS blogCnt
+		FROM 	DS_BLOG_TX
+		WHERE 	(DEL_FLG IS NULL OR DEL_FLG = 0) AND DATE_FORMAT(UPD_DATE, '%Y-%m-%d') BETWEEN #{startD} AND #{endD}
+	</select>
+	
+	<select id="selectNewBlog" resultType="com.mycompany.myschool.web.entity.admin.MainEntity">
+		SELECT
+			(SELECT DATE_FORMAT(UPD_DATE, '%m-%d %h:%i') FROM DS_BLOG_TX ORDER BY IDX DESC LIMIT 0, 1) AS newBlog1,
+			DATE_FORMAT(TIMEDIFF(NOW(), (SELECT UPD_DATE FROM DS_BLOG_TX ORDER BY IDX DESC LIMIT 0, 1)), '%H:%i') AS newBlog2
+		FROM DUAL
+	</select>
+</mapper>

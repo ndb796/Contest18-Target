@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.BoardMapper">
+
+	<resultMap id="board" type="com.mycompany.myschool.web.entity.sns.BoardEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="board_id" column="board_id" jdbcType="VARCHAR" />
+		<id property="group_id" column="group_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="contents" column="contents" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		board_id,
+		group_id,
+		student_id,
+		contents,
+		ins_date,
+		upd_date
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(BOARD_ID) 
+		FROM
+			DS_BOARD_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity" resultMap="board">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_BOARD_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="board_type != null and board_type != ''">
+				AND board_type = #{board_type}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity" resultMap="board">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_BOARD_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="board_type != null and board_type != ''">
+				AND board_type = #{board_type}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByStudent" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity" resultMap="board">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_BOARD_TX
+		WHERE
+			student_id = #{student_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<select id="selectByGroup" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity" resultMap="board">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_BOARD_TX
+		WHERE
+			student_id = #{student_id, jdbcType=VARCHAR}
+			AND
+			group_id = #{group_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity">
+	    INSERT INTO DS_BOARD_TX 
+	    ( board_id, std_idx, grp_idx, board_type, group_id, student_id, contents, ins_date, upd_date )
+	    VALUES
+	    ( #{board_id, jdbcType=VARCHAR},
+	    	#{board_type, jdbcType=INTEGER},
+	    	#{group_id, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	#{contents, jdbcType=VARCHAR},
+	    	NOW(), NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity">
+		UPDATE DS_BOARD_TX SET 
+			board_type=#{board_type, jdbcType=INTEGER},
+			contents=#{contents, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			board_id=#{board_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_BOARD_TX 
+		WHERE 
+			board_id=#{board_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.sns.BoardEntity">
+		DELETE FROM DS_BOARD_TX 
+		WHERE 
+			(IDX > 0) 
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+			<if test="board_type != null and board_type != ''">
+				AND board_type = #{board_type}
+			</if>
+	</delete>
+</mapper>

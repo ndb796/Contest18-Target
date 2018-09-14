@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.board.NewsMapper">
+
+	<resultMap id="news" type="com.mycompany.myschool.web.entity.board.NewsEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="event_reg" column="event_reg" jdbcType="VARCHAR" />
+		<id property="news_type" column="news_type" jdbcType="INTEGER" />
+		<id property="news_title" column="news_title" jdbcType="VARCHAR" />
+		<id property="news_contents" column="news_contents" jdbcType="VARCHAR" />
+		<id property="news_hit" column="news_hit" jdbcType="INTEGER" />
+		<id property="is_html" column="is_html" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+		<id property="upd_id" column="upd_id" jdbcType="VARCHAR" />
+		<id property="del_date" column="del_date" jdbcType="TIMESTAMP" />
+		<id property="del_id" column="del_id" jdbcType="VARCHAR" />
+		<id property="del_flg" column="del_flg" jdbcType="INTEGER" />		
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		school_id,
+		event_reg,
+		news_type,
+		news_title,
+		news_contents,
+		news_hit,
+		is_html,
+		upd_date,
+		DATE_FORMAT(UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR,
+		(DATE_SUB(NOW(), INTERVAL 7 DAY) > UPD_DATE) AS IS_NEW,
+		upd_id,
+		del_date,
+		del_id,
+		del_flg		
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.board.NewsEntity" resultMap="news">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_NEWS_TX
+		WHERE 
+			(DEL_FLG IS NULL OR DEL_FLG = 0) 
+			<if test="school_id != null and school_id != '' and school_id != 'ADMIN'">
+				AND SCHOOL_ID IN (#{school_id}, 'ADMIN')
+			</if>
+			
+			<if test="news_type != null and news_type != ''">
+				AND news_type = #{news_type}
+			</if>
+		ORDER BY UPD_DATE_STR DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.board.NewsEntity" resultMap="news">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_NEWS_TX
+		WHERE 
+			idx = #{idx, jdbcType=INTEGER}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.board.NewsEntity">
+	    INSERT INTO DS_NEWS_TX 
+	    ( school_id, event_reg, news_type, news_title, news_contents, upd_id, upd_date )
+	    VALUES
+	    ( #{school_id, jdbcType=VARCHAR},
+	      #{event_reg, jdbcType=VARCHAR},
+	      #{news_type, jdbcType=INTEGER},
+	    	#{news_title, jdbcType=VARCHAR},
+	    	#{news_contents, jdbcType=VARCHAR},
+	    	#{upd_id, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.board.NewsEntity">
+		UPDATE DS_NEWS_TX SET 
+			school_id=#{school_id, jdbcType=VARCHAR},
+	        event_reg=#{event_reg, jdbcType=VARCHAR},
+			news_type=#{news_type, jdbcType=INTEGER},
+	    	news_title=#{news_title, jdbcType=VARCHAR},
+	    	news_contents=#{news_contents, jdbcType=VARCHAR},
+	    	news_hit=#{news_hit, jdbcType=INTEGER},
+	    	upd_date=#{upd_date, jdbcType=VARCHAR},
+	    	upd_date=NOW(),
+	    	upd_id=#{upd_id, jdbcType=VARCHAR},
+	    	del_flg=#{del_flg, jdbcType=INTEGER}
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="delete" parameterType="hashmap">
+		UPDATE DS_NEWS_TX SET DEL_FLG=1, DEL_ID=#{del_id}, DEL_DATE=NOW()
+		WHERE 
+			idx=#{idx}
+	</delete>
+	
+	<select id="selectNewNews" resultType="com.mycompany.myschool.web.entity.admin.MainEntity">
+		SELECT
+			(SELECT DATE_FORMAT(UPD_DATE, '%m-%d %h:%i') FROM DS_NEWS_TX ORDER BY IDX DESC LIMIT 0, 1) AS newNews1,
+			DATE_FORMAT(TIMEDIFF(NOW(), (SELECT UPD_DATE FROM DS_NEWS_TX ORDER BY IDX DESC LIMIT 0, 1)), '%H:%i') AS newNews2
+		FROM DUAL
+	</select>
+	
+	<update id="updateForDelete" parameterType="com.mycompany.myschool.web.entity.board.NewsEntity">
+		UPDATE DS_NEWS_TX SET DEL_FLG = 1, DEL_DATE = NOW()
+		WHERE 
+			IDX IN (
+				<foreach collection="idArray" item="idx" separator=",">#{idx}</foreach>
+			)
+	</update>
+</mapper>

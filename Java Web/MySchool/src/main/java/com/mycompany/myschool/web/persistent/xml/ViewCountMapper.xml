@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.ViewCountMapper">
+
+	<resultMap id="viewcnt" type="com.mycompany.myschool.web.entity.customer.ViewCountEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="viewcnt" column="viewcnt" jdbcType="INTEGER" />
+		<id property="realcnt" column="realcnt" jdbcType="INTEGER" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		sb_id,
+		viewcnt,
+		realcnt,
+		ins_date,
+		upd_date
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.ViewCountEntity" resultMap="viewcnt">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_VIEWCNT_TX
+		WHERE 
+			1 = 1
+			<if test="sb_id != null and sb_id != ''">
+				AND sb_id = #{sb_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="viewcnt">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_VIEWCNT_TX
+		WHERE 
+			sb_id = #{sb_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.ViewCountEntity">
+	    INSERT INTO DS_VIEWCNT_TX 
+	    ( sb_id, viewcnt, realcnt, ins_date )
+	    VALUES
+	    ( #{sb_id, jdbcType=VARCHAR},
+	    	1,
+	    	0,
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="updateViewCnt" parameterType="com.mycompany.myschool.web.entity.customer.ViewCountEntity">
+		UPDATE DS_VIEWCNT_TX SET 
+			viewcnt=viewcnt+1,
+	    	upd_date=NOW()
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateRealCnt" parameterType="com.mycompany.myschool.web.entity.customer.ViewCountEntity">
+		UPDATE DS_VIEWCNT_TX SET 
+			realcnt=realcnt+1,
+	    	upd_date=NOW()
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_VIEWCNT_TX 
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</delete>
+</mapper>

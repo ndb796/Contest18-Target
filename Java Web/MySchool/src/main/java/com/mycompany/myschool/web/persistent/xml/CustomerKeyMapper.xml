@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerKeyMapper">
+
+	<resultMap id="school_key" type="com.mycompany.myschool.web.entity.customer.CustomerKeyEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="keycode" column="keycode" jdbcType="VARCHAR" />
+		<id property="keyword" column="keyword" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		sb_id,
+		keycode,
+		upd_date
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.CustomerKeyEntity" resultMap="school_key">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_KEY_TX
+		WHERE 
+			1 = 1
+		ORDER BY IDX ASC 
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="school_key">
+		SELECT
+			<include refid="columns"/>,
+			(SELECT code_str FROM DS_CODE_MST WHERE CODE=K.KEYCODE) AS keyword
+		FROM
+			DS_SCHOOL_KEY_TX K
+		WHERE 
+			sb_id = #{sb_id}
+	</select>
+	
+	<select id="selectByKeycode" parameterType="String" resultMap="school_key">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_KEY_TX
+		WHERE
+			KEYCODE like '%${keycode}%'
+		ORDER BY IDX ASC 
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerKeyEntity">
+	    INSERT INTO DS_SCHOOL_KEY_TX 
+	    ( sb_id, keycode, keyword, upd_date)
+	    VALUES
+	    ( #{sb_id, jdbcType=VARCHAR},
+			#{keycode, jdbcType=VARCHAR},
+			#{keyword, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerKeyEntity">
+		UPDATE DS_SCHOOL_KEY_TX SET 
+			keycode=#{keycode, jdbcType=VARCHAR},
+			keyword=#{keyword, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_KEY_TX 
+		WHERE 
+			sb_id=#{sb_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteMulti" parameterType="com.mycompany.myschool.web.entity.customer.CustomerKeyEntity">
+		DELETE FROM DS_SCHOOL_KEY_TX
+		WHERE 
+			SB_ID IN (
+				<foreach collection="sbIdArray" item="sb_id" separator=",">#{sb_id}</foreach>
+			)
+	</delete>
+</mapper>

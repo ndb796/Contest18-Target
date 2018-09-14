@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.student.StudentSub1Mapper">
+
+	<resultMap id="cur_school" type="com.mycompany.myschool.web.entity.student.StudentSub1Entity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="cur_school_type1" column="cur_school_type1" jdbcType="INTEGER" />
+		<id property="cur_school_type2" column="cur_school_type2" jdbcType="INTEGER" />
+		<id property="cur_school_code" column="cur_school_code" jdbcType="VARCHAR" />
+		<id property="cur_school_name" column="cur_school_name" jdbcType="VARCHAR" />
+		<id property="cur_school_grade" column="cur_school_grade" jdbcType="INTEGER" />
+		<id property="lang_score" column="lang_score" jdbcType="FLOAT" />
+		<id property="eng_score" column="eng_score" jdbcType="FLOAT" />
+		<id property="hist_score" column="hist_score" jdbcType="FLOAT" />
+		<id property="civil_score" column="civil_score" jdbcType="FLOAT" />
+		<id property="mat_score" column="mat_score" jdbcType="FLOAT" />
+		<id property="sci_score" column="sci_score" jdbcType="FLOAT" />
+		<id property="rank" column="rank" jdbcType="VARCHAR" />
+		<id property="remarks" column="remarks" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="ins_date_str" column="ins_date_str" jdbcType="VARCHAR" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		student_id,
+		cur_school_type1,
+		cur_school_type2,
+		cur_school_code,
+		cur_school_name,
+		cur_school_grade,
+		lang_score,
+		eng_score,
+		hist_score,
+		civil_score,
+		mat_score,
+		sci_score,
+		rank,
+		remarks,
+		ins_date,
+		upd_date,
+		DATE_FORMAT(INS_DATE, '%Y-%m-%d %H:%i:%S') AS INS_DATE_STR,
+		DATE_FORMAT(UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR
+	</sql>
+	
+	<!-- <select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(STUDENT_ID) 
+		FROM
+			DS_STUDENT_TX
+	</select> -->
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.student.StudentSub1Entity" resultMap="cur_school">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_STUDENT_SUB1_TX
+		WHERE 
+			1 = 1 
+			<if test="cur_school_type1 != null and cur_school_type1 != ''">
+				AND cur_school_type1 = #{cur_school_type1}
+			</if>
+			<if test="cur_school_type2 != null and cur_school_type2 != ''">
+				AND cur_school_type2 = #{cur_school_type2}
+			</if>
+			<if test="cur_school_code != null and cur_school_code != ''">
+				AND cur_school_code = #{cur_school_code}
+			</if>
+			<if test="cur_school_name != null and cur_school_name != ''">
+				AND cur_school_name = #{cur_school_name}
+			</if>
+			<if test="cur_school_grade != null and cur_school_grade != ''">
+				AND cur_school_grade = #{cur_school_grade}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="cur_school">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_STUDENT_SUB1_TX
+		WHERE 
+			student_id = #{student_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.student.StudentSub1Entity">
+	    INSERT INTO DS_STUDENT_SUB1_TX 
+	    ( student_id,  
+	    	cur_school_type1, cur_school_type2, cur_school_code, cur_school_name, cur_school_grade,
+			lang_score, eng_score, hist_score, civil_score, mat_score, sci_score,
+			rank, ins_date )
+	    VALUES
+	    ( #{student_id, jdbcType=VARCHAR},
+	     	#{cur_school_type1, jdbcType=INTEGER},
+	    	#{cur_school_type2, jdbcType=INTEGER},
+	    	#{cur_school_code, jdbcType=VARCHAR},
+	    	#{cur_school_name, jdbcType=VARCHAR},
+	    	#{cur_school_grade, jdbcType=INTEGER},
+	    	#{lang_score, jdbcType=FLOAT},
+	    	#{eng_score, jdbcType=FLOAT},
+	    	#{hist_score, jdbcType=FLOAT},
+	    	#{civil_score, jdbcType=FLOAT},
+	    	#{mat_score, jdbcType=FLOAT},
+	    	#{sci_score, jdbcType=FLOAT},
+	    	#{rank, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.student.StudentSub1Entity">
+		UPDATE DS_STUDENT_SUB1_TX SET 
+			cur_school_type1=#{cur_school_type1, jdbcType=INTEGER},
+	    	cur_school_type2=#{cur_school_type2, jdbcType=INTEGER},
+	    	cur_school_code=#{cur_school_code, jdbcType=VARCHAR},
+	    	cur_school_name=#{cur_school_name, jdbcType=VARCHAR},
+	    	cur_school_grade=#{cur_school_grade, jdbcType=INTEGER},
+	    	lang_score=#{lang_score, jdbcType=FLOAT},
+	    	eng_score=#{eng_score, jdbcType=FLOAT},
+	    	hist_score=#{hist_score, jdbcType=FLOAT},
+	    	civil_score=#{civil_score, jdbcType=FLOAT},
+	    	mat_score=#{mat_score, jdbcType=FLOAT},
+	    	sci_score=#{sci_score, jdbcType=FLOAT},
+	    	rank=#{rank, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			student_id=#{student_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_STUDENT_SUB1_TX 
+		WHERE 
+			student_id=#{student_id, jdbcType=VARCHAR}
+	</delete>
+</mapper>

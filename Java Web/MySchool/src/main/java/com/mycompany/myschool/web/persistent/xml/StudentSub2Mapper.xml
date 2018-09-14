@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.student.StudentSub2Mapper">
+
+	<resultMap id="specific" type="com.mycompany.myschool.web.entity.student.StudentSub2Entity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="school1" column="school1" jdbcType="VARCHAR" />
+		<id property="school2" column="school2" jdbcType="VARCHAR" />
+		<id property="school3" column="school3" jdbcType="VARCHAR" />
+		<id property="location1" column="location1" jdbcType="VARCHAR" />
+		<id property="location2" column="location2" jdbcType="VARCHAR" />
+		<id property="location3" column="location3" jdbcType="VARCHAR" />
+		<id property="subject1" column="subject1" jdbcType="VARCHAR" />
+		<id property="subject2" column="subject2" jdbcType="VARCHAR" />
+		<id property="subject3" column="subject3" jdbcType="VARCHAR" />
+		<id property="job1" column="job1" jdbcType="VARCHAR" />
+		<id property="job2" column="job2" jdbcType="VARCHAR" />
+		<id property="job3" column="job3" jdbcType="VARCHAR" />
+		<id property="field1" column="field1" jdbcType="VARCHAR" />
+		<id property="field2" column="field2" jdbcType="VARCHAR" />
+		<id property="field3" column="field3" jdbcType="VARCHAR" />
+		<id property="school_ord" column="school_ord" jdbcType="INTEGER" />
+		<id property="subject_ord" column="subject_ord" jdbcType="INTEGER" />
+		<id property="location_ord" column="location_ord" jdbcType="INTEGER" />
+		<id property="job_ord" column="job_ord" jdbcType="INTEGER" />
+		<id property="field_ord" column="field_ord" jdbcType="INTEGER" />
+		<id property="remarks" column="remarks" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="ins_date_str" column="ins_date_str" jdbcType="VARCHAR" />
+		<id property="upd_date_str" column="upd_date_str" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		student_id,
+		school1,
+		school2,
+		school3,
+		location1,
+		location2,
+		location3,
+		subject1,
+		subject2,
+		subject3,
+		job1,
+		job2,
+		job3,
+		field1,
+		field2,
+		field3,
+		school_ord,
+		subject_ord,
+		location_ord,
+		job_ord,
+		field_ord,
+		remarks,
+		ins_date,
+		upd_date,
+		DATE_FORMAT(INS_DATE, '%Y-%m-%d %H:%i:%S') AS INS_DATE_STR,
+		DATE_FORMAT(UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR
+	</sql>
+	
+	<select id="select" parameterType="String" resultMap="specific">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_STUDENT_SUB2_TX
+		WHERE 
+			1 = 1 
+			<if test="school1 != null and school1 != ''">
+				AND school1 = #{school1}
+			</if>
+			<if test="school2 != null and school2 != ''">
+				AND school2 = #{school2}
+			</if>
+			<if test="school3 != null and school3 != ''">
+				AND school3 = #{school3}
+			</if>
+			<if test="location1 != null and location1 != ''">
+				AND location1 = #{location1}
+			</if>
+			<if test="location2 != null and location2 != ''">
+				AND location2 = #{location2}
+			</if>
+			<if test="location3 != null and location3 != ''">
+				AND location3 = #{location3}
+			</if>
+			<if test="subject1 != null and subject1 != ''">
+				AND subject1 = #{subject1}
+			</if>
+			<if test="subject2 != null and subject2 != ''">
+				AND subject2 = #{subject2}
+			</if>
+			<if test="subject3 != null and subject3 != ''">
+				AND subject3 = #{subject3}
+			</if>
+			<if test="job1 != null and job1 != ''">
+				AND job1 = #{job1}
+			</if>
+			<if test="job2 != null and job2 != ''">
+				AND job2 = #{job2}
+			</if>
+			<if test="job3 != null and job3 != ''">
+				AND job3 = #{job3}
+			</if>
+			<if test="field1 != null and field1 != ''">
+				AND field1 = #{field1}
+			</if>
+			<if test="field2 != null and field2 != ''">
+				AND field2 = #{field2}
+			</if>
+			<if test="field3 != null and field3 != ''">
+				AND field3 = #{field3}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="specific">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_STUDENT_SUB2_TX
+		WHERE 
+			student_id = #{student_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.student.StudentSub2Entity">
+	    INSERT INTO DS_STUDENT_SUB2_TX 
+	    ( student_id, 
+			school1, school2, school3,
+			location1, location2, location3,
+			subject1, subject2, subject3,
+			job1, job2, job3,
+			field1, field2, field3,
+			school_ord, subject_ord, location_ord, job_ord, field_ord,
+			ins_date)
+	    VALUES
+	    ( #{student_id, jdbcType=VARCHAR},
+	    	#{school1, jdbcType=VARCHAR},
+	    	#{school2, jdbcType=VARCHAR},
+	    	#{school3, jdbcType=VARCHAR},
+	    	#{location1, jdbcType=VARCHAR},
+	    	#{location2, jdbcType=VARCHAR},
+	    	#{location3, jdbcType=VARCHAR},
+	    	#{subject1, jdbcType=VARCHAR},
+	    	#{subject2, jdbcType=VARCHAR},
+	    	#{subject3, jdbcType=VARCHAR},
+	    	#{job1, jdbcType=VARCHAR},
+	    	#{job2, jdbcType=VARCHAR},
+	    	#{job3, jdbcType=VARCHAR},
+	    	#{field1, jdbcType=VARCHAR},
+	    	#{field2, jdbcType=VARCHAR},
+	    	#{field3, jdbcType=VARCHAR},
+	    	#{school_ord, jdbcType=INTEGER},
+	    	#{subject_ord, jdbcType=INTEGER},
+	    	#{location_ord, jdbcType=INTEGER},
+	    	#{job_ord, jdbcType=INTEGER},
+	    	#{field_ord, jdbcType=INTEGER},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.student.StudentSub2Entity">
+		UPDATE DS_STUDENT_SUB2_TX SET 
+			school1=#{school1, jdbcType=VARCHAR},
+	    	school2=#{school2, jdbcType=VARCHAR},
+	    	school3=#{school3, jdbcType=VARCHAR},
+	    	location1=#{location1, jdbcType=VARCHAR},
+	    	location2=#{location2, jdbcType=VARCHAR},
+	    	location3=#{location3, jdbcType=VARCHAR},
+	    	subject1=#{subject1, jdbcType=VARCHAR},
+	    	subject2=#{subject2, jdbcType=VARCHAR},
+	    	subject3=#{subject3, jdbcType=VARCHAR},
+	    	job1=#{job1, jdbcType=VARCHAR},
+	    	job2=#{job2, jdbcType=VARCHAR},
+	    	job3=#{job3, jdbcType=VARCHAR},
+	    	field1=#{field1, jdbcType=VARCHAR},
+	    	field2=#{field2, jdbcType=VARCHAR},
+	    	field3=#{field3, jdbcType=VARCHAR},
+	    	school_ord=#{school_ord, jdbcType=INTEGER},
+	    	subject_ord=#{subject_ord, jdbcType=INTEGER},
+	    	location_ord=#{location_ord, jdbcType=INTEGER},
+	    	job_ord=#{job_ord, jdbcType=INTEGER},
+	    	field_ord=#{field_ord, jdbcType=INTEGER},
+	    	upd_date=NOW()
+		WHERE 
+			student_id=#{student_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_STUDENT_SUB2_TX 
+		WHERE 
+			student_id=#{student_id, jdbcType=VARCHAR}
+	</delete>
+</mapper>

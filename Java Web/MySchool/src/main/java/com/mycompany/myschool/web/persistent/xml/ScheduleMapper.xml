@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.board.ScheduleMapper">
+
+	<resultMap id="schedule" type="com.mycompany.myschool.web.entity.board.ScheduleEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="evt_id" column="evt_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="group_id" column="group_id" jdbcType="VARCHAR" />
+		<id property="evt_title" column="evt_title" jdbcType="VARCHAR" />
+		<id property="evt_type" column="evt_type" jdbcType="INTEGER" />
+		<id property="evt_reg" column="evt_reg" jdbcType="INTEGER" />
+		<id property="evt_category" column="evt_category" jdbcType="INTEGER" />
+		<id property="evt_date_s" column="evt_date_s" jdbcType="VARCHAR" />
+		<id property="evt_date_e" column="evt_date_e" jdbcType="VARCHAR" />
+		<id property="evt_time_s" column="evt_time_s" jdbcType="VARCHAR" />
+		<id property="evt_time_e" column="evt_time_e" jdbcType="VARCHAR" />
+		<id property="evt_location" column="evt_location" jdbcType="VARCHAR" />
+		<id property="evt_contents" column="evt_contents" jdbcType="VARCHAR" />
+		<id property="remarks" column="remarks" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="del_flg" column="del_flg" jdbcType="INTEGER" />		
+	</resultMap>
+	
+	<resultMap id="evnt_reg" type="com.mycompany.myschool.web.entity.board.EvntRegEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="evt_id" column="evt_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="reg_date" column="reg_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		evt_id,
+		student_id,
+		group_id,
+		evt_title,
+		evt_type,
+		evt_reg,
+		evt_category,
+		evt_date_s,
+		evt_date_e,
+		evt_time_s,
+		evt_time_e,
+		evt_location,
+		evt_contents,
+		remarks,
+		ins_date,
+		upd_date,
+		del_flg		
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(EVT_ID) 
+		FROM
+			DS_EVENT_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id})
+			</if>
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectInRange" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			student_id = #{student_id}
+			AND evt_date_s &gt;= #{evt_date_s} 
+			AND evt_date_e &lt;= #{evt_date_e}
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOnPublic" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			student_id like '%SCH%'
+			AND evt_type = 1
+			AND evt_date_s &gt;= #{evt_date_s} 
+			AND evt_date_e &lt;= #{evt_date_e}
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOfRcmmd" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			student_id in (SELECT sb_id FROM DS_RCMMD_TX WHERE student_id = #{student_id})
+			AND evt_date_s &gt;= #{evt_date_s} 
+			AND evt_date_e &lt;= #{evt_date_e}
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOneDay" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			student_id = #{student_id}
+			AND evt_date_s = #{evt_date_s} 
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectCountInRange" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultType="Integer">
+		SELECT
+			COUNT(IDX)
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			(IDX > 0) 
+			AND evt_date_s BETWEEN #{evt_date_s} AND #{evt_date_e}
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id})
+			</if>
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE 
+			evt_id = #{evt_id, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectByStudent" parameterType="String" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE
+			student_id = #{student_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<select id="selectByGroup" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity" resultMap="schedule">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EVENT_TX
+		WHERE
+			student_id = #{student_id, jdbcType=VARCHAR}
+			AND
+			group_id = #{group_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity">
+	    INSERT INTO DS_EVENT_TX 
+	    ( evt_id, student_id, group_id, evt_title, evt_type, evt_reg, evt_category, evt_date_s, evt_date_e, evt_time_s, evt_time_e, evt_location, evt_contents, ins_date )
+	    VALUES
+	    ( #{evt_id, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	#{group_id, jdbcType=VARCHAR},
+	    	#{evt_title, jdbcType=VARCHAR},
+	    	#{evt_type, jdbcType=INTEGER},
+	    	#{evt_reg, jdbcType=INTEGER},
+	    	#{evt_category, jdbcType=INTEGER},
+	    	#{evt_date_s, jdbcType=VARCHAR},
+	    	#{evt_date_e, jdbcType=VARCHAR},
+	    	#{evt_time_s, jdbcType=VARCHAR},
+	    	#{evt_time_e, jdbcType=VARCHAR},
+	    	#{evt_location, jdbcType=VARCHAR},
+	    	#{evt_contents, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity">
+		UPDATE DS_EVENT_TX SET 
+			evt_title=#{evt_title, jdbcType=VARCHAR},
+			evt_type=#{evt_type, jdbcType=INTEGER},
+			evt_reg=#{evt_reg, jdbcType=INTEGER},
+			evt_category=#{evt_category, jdbcType=INTEGER},
+			evt_date_s=#{evt_date_s, jdbcType=VARCHAR},
+			evt_date_e=#{evt_date_e, jdbcType=VARCHAR},
+			evt_time_s=#{evt_time_s, jdbcType=VARCHAR},
+			evt_time_e=#{evt_time_e, jdbcType=VARCHAR},
+			evt_location=#{evt_location, jdbcType=VARCHAR},
+	    	evt_contents=#{evt_contents, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			evt_id=#{evt_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_EVENT_TX 
+		WHERE 
+			evt_id=#{evt_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.board.ScheduleEntity">
+		DELETE FROM DS_EVENT_TX 
+		WHERE 
+			(IDX > 0) 
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id}
+			</if>
+	</delete>
+	
+	<!-- event regist -->
+	<insert id="insertEvntReg" parameterType="com.mycompany.myschool.web.entity.board.EvntRegEntity">
+	    INSERT INTO DS_EVNT_REG_TX 
+	    ( evt_id, student_id, reg_date )
+	    VALUES
+	    ( #{evt_id, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<select id="countEvntReg" parameterType="com.mycompany.myschool.web.entity.board.EvntRegEntity" resultType="INTEGER">
+		SELECT
+			COUNT(IDX)
+		FROM
+			DS_EVNT_REG_TX
+		WHERE 
+			evt_id = #{evt_id, jdbcType=VARCHAR} and
+			student_id = #{student_id, jdbcType=VARCHAR}
+	</select>
+</mapper>

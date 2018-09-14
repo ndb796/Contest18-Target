@@ -1,0 +1,171 @@
+
+.leftarea{
+padding-top:10px;
+padding-left:10px;
+float:left;
+}
+
+.centerarea{
+padding-top:10px;
+padding-left:50px;
+float:left;
+
+}
+
+.rightarea{
+float:right;
+padding-top:10px;
+padding-right:10px;
+}
+
+
+.header_menu{
+	background:#2BAC0A;
+	width:100%;
+	height:47px;
+}
+
+
+
+.user_list{
+clear:both;
+height:29px;
+background:#DED9B1;
+}
+
+.user{
+padding-left:10px;
+}
+
+
+.schedule_info{
+clear:both;
+background:#FFF;
+border-left:solid 1px #CCC;
+border-right:solid 1px #CCC;
+}
+
+.schedule_info p{
+padding:10px;
+}
+
+.agenda{
+display:block;
+font-family:"�q���M�m�p�S Pro W3", "Hiragino Kaku Gothic Pro", "���C���I", Meiryo, Osaka, "�l�r �o�S�V�b�N", "MS PGothic", sans-serif;
+font-size:10pt;
+padding:15px;
+}
+
+.agenda_empty{
+border-top:solid 1px #E8E7E7;
+display:block;
+height:45px;
+}
+
+
+ul{
+margin:0;
+padding:0;
+}
+
+.function_list ul{
+text-align:center;
+}
+
+
+
+li {
+margin:0;
+padding:0;
+list-style:none;
+float:left;
+
+}
+
+.schedule_list{
+height:44px;
+background-image: url("../images/calendar/schedule_bg.gif");
+background-repeat: repeat-x;
+}
+
+.calendar {
+clear:both;
+}
+
+
+.schedule_year{
+padding:5px 0 5px 0;
+text-align:center;
+}
+
+.function_list{
+height:48px;
+background-image: url("../images/common/nav_bg.gif");
+background-repeat: repeat-x;
+}
+
+.top_line{
+border-top:solid 1px #CCC; 
+}
+
+footer{
+font-size:0;
+}
+
+.calendar{
+font-family:"�q���M�m�p�S Pro W3", "Hiragino Kaku Gothic Pro", "���C���I", Meiryo, Osaka, "�l�r �o�S�V�b�N", "MS PGothic", sans-serif;
+
+}
+
+table {
+border-collapse: collapse;
+background:#FFF;
+width:100%;
+}
+
+td{
+border:solid 1px #CCC;
+height:50px;
+vertical-align:top;
+padding-left:5px;
+padding-top:2px;
+}
+th{
+border:solid 1px #CCC;
+font-size:8pt;
+font-weight:normal;
+}
+
+
+#event{
+background:#C3F6A7;
+border:solid 2px #8CCD7A;
+}
+
+
+
+
+.sunday{
+background:#FFE6E7;
+}
+
+.saturday{
+background:#D8F4FF;
+}
+
+.pre_m,
+.next_m{
+color:#888;
+
+}
+
+footer {
+background:#CCC;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,178 @@
+
+.leftarea{
+padding-top:9px;
+padding-left:10px;
+float:left;
+}
+
+.centerarea{
+padding-top:7px;
+padding-left:75px;
+float:left;
+
+}
+
+.rightarea{
+float:right;
+padding-top:9px;
+padding-right:10px;
+}
+
+
+.header_menu{
+	background:#F1006B;
+width:100%;
+	height:47px;
+}
+
+.header_menu .btn_pulldow{
+	clear:both;
+	display:block;
+	text-align:center;
+}
+
+
+
+.user_list{
+clear:both;
+height:29px;
+background:#DED9B1;
+}
+
+.user{
+padding-left:10px;
+}
+
+section p {
+margin:0;
+padding:0;
+float:left;
+padding-right:5px;
+padding-top:5px;
+}
+
+.main_contents{
+background:#FFF;
+border:solid 1px #CCC;
+margin:10px 10px 10px 10px;
+
+border-radius: 0.3em;
+}
+
+.post_data{
+float:left;
+padding-top:10px;
+padding-left:5px;
+padding-bottom:8px;
+line-height:90%;
+}
+
+
+.profile_icon{
+display:block;
+padding-top:10px;
+padding-left:10px;
+padding-bottom:8px;
+float:left;
+}
+
+.user_name{
+font-family:"�q���M�m�p�S Pro W3", "Hiragino Kaku Gothic Pro", "���C���I", Meiryo, Osaka, "�l�r �o�S�V�b�N", "MS PGothic", sans-serif;
+font-size:10pt;
+font-weight:bold;
+}
+
+.date{
+font-family:"�q���M�m�p�S Pro W3", "Hiragino Kaku Gothic Pro", "���C���I", Meiryo, Osaka, "�l�r �o�S�V�b�N", "MS PGothic", sans-serif;
+font-size:10pt;
+color:#888;
+}
+
+.other_icon{
+padding-top:8px;
+padding-left:10px;
+padding-bottom:8px;
+}
+
+.btn_area{
+padding-left:10px;
+padding-bottom:8px;
+float:left;
+}
+
+.response{
+ height:34px;
+}
+
+.other{
+padding-right:10px;
+float:right;
+}
+
+.btn_layout{
+padding-left:3px;
+}
+
+.comment_area{
+background:#FFF;
+border:solid 1px #CCC;
+margin:10px 10px 10px 10px;
+border-radius: 0.3em;
+}
+
+.comment{
+font-family:"�q���M�m�p�S Pro W3", "Hiragino Kaku Gothic Pro", "���C���I", Meiryo, Osaka, "�l�r �o�S�V�b�N", "MS PGothic", sans-serif;
+font-size:10pt;
+}
+
+.comment_user{
+float:left;
+padding-top:10px;
+padding-left:10px;
+width:40px;
+height:100%;
+}
+
+.comment_info{
+padding-right:5px;
+padding-top:10px;
+padding-bottom:5px;
+margin-left:50px;
+height:100%;
+}
+
+
+
+ul{
+margin:0;
+padding:0;
+}
+
+.function_list ul{
+text-align:center;
+}
+
+
+
+li {
+margin:0;
+padding:0;
+list-style:none;
+float:left;
+
+}
+
+.function_list{
+height:48px;
+background-image: url("../images/common/nav_bg.gif");
+background-repeat: repeat-x;
+}
+
+.top_line{
+border-top:solid 1px #CCC; 
+}
+
+footer{
+font-size:0;
+}
+

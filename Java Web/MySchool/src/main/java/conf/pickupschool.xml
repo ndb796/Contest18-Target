@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pickupschool>
+	<school id="SCH000011">
+		<image>/images/locale/ja/user/pages/top/img_pickup.png"</image>
+	   	<name>한국여자재단 중학교, 고등학교</name>
+	   	<desc1>한국여자재단에서는 창립 이래의 건학 정신을 계승해, 사람으로서의 올바른 길과 배려의 마음을 소중히하고, 노력을 쌓아 재능을 늘리는 교육을 목표로 왔습니다.</desc1>
+	   	<desc2>한국여자재단에서는 학생들의 자주적인 학생회 활동이나 학교 행사가 한창입니다. 문화계, 체육계 따라 48 클럽이 옛날부터 모든 학생들이 참가하고 고3까지 활동을 계속하고 있습니다. 다양한 분야에서 학생 개개인이 가지고있는 재능을 발견하고 감성 풍부한 성장하고 있습니다.</desc2>
+	</school>
+</pickupschool>

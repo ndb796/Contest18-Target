@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.EmotionMapper">
+
+	<resultMap id="emotion" type="com.mycompany.myschool.web.entity.sns.EmotionEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="board_id" column="board_id" jdbcType="VARCHAR" />
+		<id property="emotion_h" column="emotion_h" jdbcType="INTEGER" />
+		<id property="emotion_f" column="emotion_f" jdbcType="INTEGER" />
+		<id property="emotion_k" column="emotion_k" jdbcType="INTEGER" />
+		<id property="emotion_n" column="emotion_n" jdbcType="INTEGER" />
+		<id property="emotion_s" column="emotion_s" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		board_id,
+		emotion_h,
+		emotion_f,
+		emotion_k,
+		emotion_n,
+		emotion_s	
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.EmotionEntity" resultMap="emotion">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EMOTION_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="board_id != null and board_id != ''">
+				AND board_id = #{board_id}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.sns.EmotionEntity" resultMap="emotion">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EMOTION_TX
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectByBoard" parameterType="String" resultMap="emotion">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_EMOTION_TX
+		WHERE
+			board_id = #{board_id, jdbcType=VARCHAR}
+		ORDER BY IDX DESC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.EmotionEntity">
+	    INSERT INTO DS_EMOTION_TX 
+	    ( board_id, emotion_h, emotion_f, emotion_k, emotion_n, emotion_s)
+	    VALUES
+	    ( #{board_id, jdbcType=VARCHAR},
+	    	#{emotion_h, jdbcType=INTEGER},
+	    	#{emotion_f, jdbcType=INTEGER},
+	    	#{emotion_k, jdbcType=INTEGER},
+	    	#{emotion_n, jdbcType=INTEGER},
+	    	#{emotion_s, jdbcType=INTEGER}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.sns.EmotionEntity">
+		UPDATE DS_EMOTION_TX SET 
+			emotion_h=#{emotion_h, jdbcType=INTEGER},
+			emotion_f=#{emotion_f, jdbcType=INTEGER},
+			emotion_k=#{emotion_k, jdbcType=INTEGER},
+			emotion_n=#{emotion_n, jdbcType=INTEGER},
+			emotion_s=#{emotion_s, jdbcType=INTEGER}
+		WHERE 
+			board_id=#{board_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM DS_EMOTION_TX 
+		WHERE 
+			idx = #{idx, jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.sns.EmotionEntity">
+		DELETE FROM DS_EMOTION_TX 
+		WHERE 
+			(IDX > 0) 
+			<if test="board_id != null and board_id != ''">
+				AND board_id = #{board_id}
+			</if>
+	</delete>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.common.CodeMstMapper">
+
+	<resultMap id="code_mst" type="com.mycompany.myschool.web.entity.common.CodeMstEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="code" column="code" jdbcType="VARCHAR" />
+		<id property="type" column="type" jdbcType="VARCHAR" />
+		<id property="code_str" column="code_str" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		code,
+		type,
+		code_str
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.common.CodeMstEntity" resultMap="code_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_CODE_MST
+		WHERE 
+			1 = 1
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectByType" parameterType="String" resultMap="code_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_CODE_MST
+		WHERE 
+			type = #{type}
+		ORDER BY CODE ASC 
+	</select>
+	
+	<select id="selectByCode" parameterType="String" resultType="com.mycompany.myschool.web.entity.common.CodeMstEntity">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_CODE_MST
+		WHERE 
+			code = #{code}
+	</select>
+	
+	<select id="selectByCodeStr" parameterType="String" resultMap="code_mst">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_CODE_MST
+		WHERE 
+			code_str LIKE '%${code}%'
+		ORDER BY CODE ASC
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.common.CodeMstEntity">
+	    INSERT INTO DS_CODE_MST 
+	    ( CODE, TYPE, CODE_STR )
+	    VALUES
+	    ( <!-- SEQ_USER_IDX.NEXTVAL,  -->
+	    	#{code, jdbcType=VARCHAR},
+	    	#{type, jdbcType=VARCHAR},
+	    	#{code_str, jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.common.SpecificMstEntity">
+		UPDATE DS_CODE_MST SET 
+	    	type=#{type, jdbcType=VARCHAR},
+	    	code_str=#{code_str, jdbcType=VARCHAR}
+		WHERE 
+			code=#{code, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_CODE_MST 
+		WHERE 
+			code=#{code, jdbcType=VARCHAR}
+	</delete>
+</mapper>

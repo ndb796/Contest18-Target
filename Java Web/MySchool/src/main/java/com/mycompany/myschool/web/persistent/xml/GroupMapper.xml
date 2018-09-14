@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.GroupMapper">
+
+	<resultMap id="group" type="com.mycompany.myschool.web.entity.sns.GroupEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="group_id" column="group_id" jdbcType="VARCHAR" />
+		<id property="student_id" column="student_id" jdbcType="VARCHAR" />
+		<id property="group_name" column="group_name" jdbcType="VARCHAR" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		group_id,
+		group_name,
+		student_id,
+		upd_date
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(GROUP_ID) 
+		FROM
+			DS_GROUP_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.GroupEntity" resultMap="group">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_GROUP_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="student_id != null and student_id != ''">
+				AND student_id = #{student_id})
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.sns.GroupEntity" resultMap="group">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_GROUP_TX
+		WHERE 
+			group_id = #{group_id}
+	</select>
+	
+	<select id="selectByStudent" parameterType="String" resultMap="group">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_GROUP_TX
+		WHERE
+			student_id = #{student_id, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.GroupEntity">
+	    INSERT INTO DS_GROUP_TX 
+	    ( group_id, group_name, student_id, upd_date )
+	    VALUES
+	    ( #{group_id, jdbcType=VARCHAR},
+	    	#{group_name, jdbcType=VARCHAR},
+	    	#{student_id, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.sns.GroupEntity">
+		UPDATE DS_GROUP_TX SET 
+			group_name=#{group_name, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			group_id=#{group_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_GROUP_TX 
+		WHERE 
+			group_id=#{group_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.sns.GroupEntity">
+		DELETE FROM DS_GROUP_TX 
+		WHERE 
+			(IDX > 0) 
+			<if test="group_id != null and group_id != ''">
+				AND group_id = #{group_id}
+			</if>
+	</delete>
+</mapper>

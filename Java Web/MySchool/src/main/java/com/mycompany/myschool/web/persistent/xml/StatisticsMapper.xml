@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.common.StatisticsMapper">
+
+	<resultMap id="stat" type="com.mycompany.myschool.web.entity.vo.StatisticsVo">
+		<id property="col" column="col" jdbcType="VARCHAR" />
+		<id property="cnt" column="cnt" jdbcType="INTEGER" />
+		<id property="col2" column="col2" jdbcType="VARCHAR" />
+		<id property="cnt2" column="cnt2" jdbcType="INTEGER" />
+		<id property="col3" column="col3" jdbcType="VARCHAR" />
+		<id property="cnt3" column="cnt3" jdbcType="VARCHAR" />
+	</resultMap>
+
+	
+	<select id="selectByUserCount" parameterType="Integer" resultMap="stat">
+		SELECT
+			DATE_FORMAT(UPD_DATE, '%m%d') AS COL, COUNT(USER_ID) AS CNT
+		FROM
+			DS_USER_TX
+		WHERE 
+			MEM_TYPE=#{memType} AND
+			UPD_DATE BETWEEN DATE_SUB(NOW(), interval 7 day) AND NOW()
+		GROUP BY DATE_FORMAT(UPD_DATE, '%m%d')
+	</select>
+	
+	<select id="selectRegCount" resultMap="stat">
+		SELECT		MEM_TYPE AS COL, COUNT(USER_ID) AS CNT 
+		FROM 		DS_USER_TX 
+		GROUP BY 	MEM_TYPE;
+	</select>
+	
+	<select id="selectConsultCountByUserId" parameterType="String" resultType="com.mycompany.myschool.web.entity.vo.StatisticsVo">
+		SELECT count(*) AS CNT, 
+			   (SELECT count(*) FROM DS_SNS_CONSULT_TX WHERE STUDENT_ID=#{student_id}) AS CNT2
+		FROM   DS_SNS_CONSULT_TX
+	</select>
+	
+	<select id="selectConsultCountAll" parameterType="Integer" resultType="com.mycompany.myschool.web.entity.vo.StatisticsVo">
+		SELECT
+			DATE_FORMAT(INS_DATE, '%m%d') AS COL, COUNT(IDX) AS CNT
+		FROM
+			DS_SNS_CONSULT_TX
+		WHERE 
+			CONST_STATUS=#{const_status} AND
+			INS_DATE BETWEEN DATE_SUB(NOW(), interval 7 day) AND NOW()
+		GROUP BY DATE_FORMAT(INS_DATE, '%m%d')
+	</select>
+	
+	<select id="selectAccessCount" resultMap="stat">
+		SELECT		SCH_CNT as cnt, STD_CNT as cnt2, DATE_FORMAT(ACCESS_DATE, '%m%d') AS cnt3
+		FROM		DS_ACCESS_TX
+		ORDER BY 	ACCESS_DATE ASC
+		LIMIT 7
+	</select>
+</mapper>

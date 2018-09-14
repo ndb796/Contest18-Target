@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerMapper">
+
+	<resultMap id="school" type="com.mycompany.myschool.web.entity.customer.CustomerEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="school_name" column="school_name" jdbcType="VARCHAR" />
+		<id property="school_type" column="school_type" jdbcType="VARCHAR" />
+		<id property="school_category" column="school_category" jdbcType="VARCHAR" />
+		<id property="title1" column="title1" jdbcType="VARCHAR" />
+		<id property="title2" column="title2" jdbcType="VARCHAR" />
+		<id property="contents" column="contents" jdbcType="VARCHAR" />
+		<id property="built_year" column="built_year" jdbcType="VARCHAR" />
+		<id property="homepage" column="homepage" jdbcType="VARCHAR" />
+		<id property="loc_code" column="loc_code" jdbcType="VARCHAR" />
+		<id property="zipcode" column="zipcode" jdbcType="VARCHAR" />
+		<id property="address1" column="address1" jdbcType="VARCHAR" />
+		<id property="address2" column="address2" jdbcType="VARCHAR" />
+		<id property="address3" column="address3" jdbcType="VARCHAR" />
+		<id property="address4" column="address4" jdbcType="VARCHAR" />
+		<id property="std_info" column="std_info" jdbcType="VARCHAR" />
+		<id property="logoname" column="logoname" jdbcType="VARCHAR" />
+		<id property="logosize" column="logosize" jdbcType="BIGINT" />
+		<id property="origin_name" column="origin_name" jdbcType="VARCHAR" />
+		<id property="paid_type" column="paid_type" jdbcType="VARCHAR" />
+		<id property="remarks" column="remarks" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_id" column="upd_id" jdbcType="VARCHAR" />
+		<id property="del_date" column="del_date" jdbcType="TIMESTAMP" />
+		<id property="del_flg" column="del_flg" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="school_info" type="com.mycompany.myschool.web.entity.vo.SchoolInfoVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="school_name" column="school_name" jdbcType="VARCHAR" />
+		<id property="school_type" column="school_type" jdbcType="VARCHAR" />
+		<id property="school_category" column="school_category" jdbcType="VARCHAR" />
+		<id property="title1" column="title1" jdbcType="VARCHAR" />
+		<id property="title2" column="title2" jdbcType="VARCHAR" />
+		<id property="contents" column="contents" jdbcType="VARCHAR" />
+		<id property="built_year" column="built_year" jdbcType="VARCHAR" />
+		<id property="homepage" column="homepage" jdbcType="VARCHAR" />
+		<id property="zipcode" column="zipcode" jdbcType="VARCHAR" />
+		<id property="address1" column="address1" jdbcType="VARCHAR" />
+		<id property="address2" column="address2" jdbcType="VARCHAR" />
+		<id property="address3" column="address3" jdbcType="VARCHAR" />
+		<id property="address4" column="address4" jdbcType="VARCHAR" />
+		<id property="std_info" column="std_info" jdbcType="VARCHAR" />
+		<id property="logoname" column="logoname" jdbcType="VARCHAR" />
+		<id property="features" column="features" jdbcType="VARCHAR" />
+		<id property="courses" column="courses" jdbcType="VARCHAR" />
+		<id property="fee" column="fee" jdbcType="VARCHAR" />
+		<id property="financial" column="financial" jdbcType="VARCHAR" />
+		<id property="selection" column="selection" jdbcType="VARCHAR" />
+		<id property="access" column="access" jdbcType="VARCHAR" />
+		<id property="map" column="map" jdbcType="VARCHAR" />
+		<id property="chr_lname" column="chr_lname" jdbcType="VARCHAR" />
+		<id property="chr_fname" column="chr_fname" jdbcType="VARCHAR" />
+		<id property="chr_dept" column="chr_dept" jdbcType="VARCHAR" />
+		<id property="chr_tel" column="chr_tel" jdbcType="VARCHAR" />
+		<id property="chr_fax" column="chr_fax" jdbcType="VARCHAR" />
+		<id property="chr_fb" column="chr_fb" jdbcType="VARCHAR" />
+		<id property="chr_tw" column="chr_tw" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<association property="schoolRef" javaType="com.mycompany.myschool.web.entity.customer.CustomerRefEntity">
+			<id property="filename1" column="filename1" jdbcType="VARCHAR" />
+			<id property="filesize1" column="filesize1" jdbcType="BIGINT" />
+			<id property="filetype1" column="filetype1" jdbcType="INTEGER" />
+			<id property="downcnt1" column="downcnt1" jdbcType="INTEGER" />
+			<id property="filename2" column="filename2" jdbcType="VARCHAR" />
+			<id property="filesize2" column="filesize2" jdbcType="BIGINT" />
+			<id property="filetype2" column="filetype2" jdbcType="INTEGER" />
+			<id property="downcnt2" column="downcnt2" jdbcType="INTEGER" />	    
+			<id property="filename3" column="filename3" jdbcType="VARCHAR" />
+			<id property="filesize3" column="filesize3" jdbcType="BIGINT" />
+			<id property="filetype3" column="filetype3" jdbcType="INTEGER" />
+			<id property="downcnt3" column="downcnt3" jdbcType="INTEGER" />	    
+		</association>
+		<!-- <collection property="schoolImgList" ofType="com.mycompany.myschool.web.entity.customer.CustomerImageEntity" resultMap="school_img" /> -->
+	</resultMap>
+	
+	<resultMap id="school_img" type="com.mycompany.myschool.web.entity.customer.CustomerImageEntity">
+	    <id property="idx" column="idx" jdbcType="INTEGER" />
+	    <id property="school_id" column="school_id" jdbcType="VARCHAR" />
+	    <id property="img_ord" column="img_ord" jdbcType="INTEGER" />
+	    <id property="filename" column="filename" jdbcType="VARCHAR" />
+	    <id property="filesize" column="filesize" jdbcType="BIGINT" />
+	    <id property="origin_name" column="origin_name" jdbcType="VARCHAR" />
+	    <id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="school_list" type="com.mycompany.myschool.web.entity.vo.SchoolListVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="school_name" column="school_name" jdbcType="VARCHAR" />
+		<id property="school_type" column="school_type" jdbcType="VARCHAR" />
+		<id property="school_category" column="school_category" jdbcType="VARCHAR" />
+		<id property="logoname" column="logoname" jdbcType="VARCHAR" />
+		<id property="favr_cnt" column="favr_cnt" jdbcType="INTEGER" />
+		<id property="rcmmd_cnt" column="rcmmd_cnt" jdbcType="INTEGER" />
+		<id property="rcmmd_type" column="rcmmd_type" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="columns">
+		idx,
+		school_id,
+		school_name,
+		school_type,
+		school_category,
+		title1,
+		title2,
+		contents,
+		built_year,
+		homepage,
+		loc_code,
+		zipcode,
+		address1,
+		address2,
+		address3,
+		address4,
+		std_info,
+		logoname,
+		logosize,
+		origin_name,
+		paid_type,
+		ins_date,
+		upd_date,
+		upd_id
+	</sql>
+	
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(SCHOOL_ID) 
+		FROM
+			DS_SCHOOL_TX
+	</select>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.CustomerEntity" resultMap="school">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_TX
+		WHERE 
+			1 = 1
+			<if test="school_name != null and school_name != ''">
+				AND school_name = #{school_name}
+			</if>
+			<if test="school_type != null and school_type != ''">
+				AND school_type = #{school_type}
+			</if>
+			<if test="school_category != null and school_category != ''">
+				AND school_category = #{school_category}
+			</if>
+			<if test="built_year != null and built_year != ''">
+				AND built_year = #{built_year}
+			</if>
+			<if test="loc_code != null and loc_code != ''">
+				AND loc_code = #{loc_code}
+			</if>
+			<if test="zipcode != null and zipcode != ''">
+				AND zipcode = #{zipcode}
+			</if>
+			<if test="address1 != null and address1 != ''">
+				AND address1 = #{address1}
+			</if>
+			<if test="address2 != null and address2 != ''">
+				AND address2 = #{address2}
+			</if>
+			<if test="address3 != null and address3 != ''">
+				AND address3 = #{address3}
+			</if>
+			<if test="address4 != null and address4 != ''">
+				AND address4 = #{address4}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectForFile" parameterType="com.mycompany.myschool.web.entity.customer.CustomerEntity" resultMap="school">
+		SELECT
+			@ROWNUM := @ROWNUM + 1 AS NO, IDX, SCHOOL_ID, SCHOOL_NAME, DATE_FORMAT(UPD_DATE, '%Y-%m-%d %H:%i:%S') AS UPD_DATE_STR
+		FROM
+			DS_SCHOOL_TX
+		WHERE 
+			1 = 1
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="school">
+		SELECT
+			<include refid="columns"/>, CONCAT(address1, address2, address3, address4) AS address
+		FROM
+			DS_SCHOOL_TX
+		WHERE 
+			school_id = #{school_id}
+	</select>
+	
+	<select id="selectBranchCount" parameterType="String" resultType="Integer">
+		SELECT COUNT(IDX) 
+		FROM DS_SCHOOL_BRANCH_TX
+		WHERE SCHOOL_ID = #{school_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerEntity">
+	    INSERT INTO DS_SCHOOL_TX 
+	    ( school_id, school_name, school_type, school_category, 
+	    	title1, title2, contents, built_year, homepage,
+			loc_code, zipcode, address1, address2, address3, address4, std_info, logoname, logosize, origin_name, paid_type, ins_date)
+	    VALUES
+	    ( #{school_id, jdbcType=VARCHAR},
+	    	#{school_name, jdbcType=VARCHAR},
+			#{school_type, jdbcType=VARCHAR},
+			#{school_category, jdbcType=VARCHAR},
+			#{title1, jdbcType=VARCHAR},
+			#{title2, jdbcType=VARCHAR},
+			#{contents, jdbcType=VARCHAR},
+			#{built_year, jdbcType=VARCHAR},
+			#{homepage, jdbcType=VARCHAR},
+			#{loc_code, jdbcType=VARCHAR},
+			#{zipcode, jdbcType=VARCHAR},
+			#{address1, jdbcType=VARCHAR},
+			#{address2, jdbcType=VARCHAR},
+			#{address3, jdbcType=VARCHAR},
+			#{address4, jdbcType=VARCHAR},
+			#{std_info, jdbcType=VARCHAR},
+			#{logoname, jdbcType=VARCHAR},
+	    	#{logosize, jdbcType=BIGINT},
+			#{origin_name, jdbcType=VARCHAR},
+			#{paid_type, jdbcType=INTEGER},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerEntity">
+		UPDATE DS_SCHOOL_TX SET
+			school_name=#{school_name, jdbcType=VARCHAR}, 
+			school_type=#{school_type, jdbcType=VARCHAR},
+			school_category=#{school_category, jdbcType=VARCHAR},
+			title1=#{title1, jdbcType=VARCHAR},
+			title2=#{title2, jdbcType=VARCHAR},
+			contents=#{contents, jdbcType=VARCHAR},
+			built_year=#{built_year, jdbcType=VARCHAR},
+			homepage=#{homepage, jdbcType=VARCHAR},
+			loc_code=#{loc_code, jdbcType=VARCHAR},
+			zipcode=#{zipcode, jdbcType=VARCHAR},
+			address1=#{address1, jdbcType=VARCHAR},
+			address2=#{address2, jdbcType=VARCHAR},
+			address1=#{address3, jdbcType=VARCHAR},
+			address2=#{address4, jdbcType=VARCHAR},
+			std_info=#{std_info, jdbcType=VARCHAR},
+			<if test="logoname != null and logoname != ''">
+	    	logoname=#{logoname, jdbcType=VARCHAR},
+	    	logosize=#{logosize, jdbcType=VARCHAR},
+	    	origin_name=#{origin_name, jdbcType=VARCHAR},
+	    	</if>
+			paid_type=#{paid_type, jdbcType=INTEGER},
+			upd_id=#{upd_id, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_TX 
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.customer.CustomerEntity">
+		DELETE FROM DS_SCHOOL_TX 
+		WHERE 
+			1 = 1
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+	</delete>
+</mapper>

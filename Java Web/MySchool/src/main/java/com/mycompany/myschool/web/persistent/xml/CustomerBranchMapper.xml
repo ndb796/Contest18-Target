@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerBranchMapper">
+	<resultMap id="customerBranch" type="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="sb_type" column="sb_type" jdbcType="TINYINT" />
+		<id property="sb_ord" column="sb_ord" jdbcType="TINYINT" />
+		<id property="sb_name" column="sb_name" jdbcType="VARCHAR" />
+		<id property="sb_title1" column="sb_title1" jdbcType="VARCHAR" />
+		<id property="sb_title2" column="sb_title2" jdbcType="VARCHAR" />
+		<id property="sb_contents" column="sb_contents" jdbcType="VARCHAR" />
+		<id property="sb_features" column="sb_features" jdbcType="VARCHAR" />
+		<id property="sb_policy" column="sb_policy" jdbcType="VARCHAR" />
+		<id property="sb_tel" column="sb_tel" jdbcType="VARCHAR" />
+		<id property="sb_fax" column="sb_fax" jdbcType="VARCHAR" />
+		<id property="sb_dept" column="sb_dept" jdbcType="VARCHAR" />
+		<id property="sb_zipcode" column="sb_zipcode" jdbcType="VARCHAR" />
+		<id property="sb_prefecture_id" column="sb_prefecture_id" jdbcType="VARCHAR" />
+		<id property="sb_address" column="sb_address" jdbcType="VARCHAR" />
+		<id property="sb_address1" column="sb_address1" jdbcType="VARCHAR" />
+		<id property="sb_address3" column="sb_address3" jdbcType="VARCHAR" />
+		<id property="sb_address4" column="sb_address4" jdbcType="VARCHAR" />
+		<id property="sb_access" column="sb_access" jdbcType="VARCHAR" />
+		<id property="photo1_name" column="photo1_name" jdbcType="VARCHAR" />
+		<id property="photo1_size" column="photo1_size" jdbcType="BIGINT" />
+		<id property="org1_name" column="org1_name" jdbcType="VARCHAR" />
+		<id property="photo2_name" column="photo2_name" jdbcType="VARCHAR" />
+		<id property="photo2_size" column="photo2_size" jdbcType="BIGINT" />
+		<id property="org2_name" column="org2_name" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_id" column="upd_id" jdbcType="VARCHAR" />
+		<id property="del_date" column="del_date" jdbcType="TIMESTAMP" />
+		<id property="del_flg" column="del_flg" jdbcType="TINYINT" />
+	</resultMap>
+
+	<resultMap id="branch_info" type="com.mycompany.myschool.web.entity.vo.BranchInfoVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="sb_type" column="sb_type" jdbcType="TINYINT" />
+		<id property="sb_ord" column="sb_ord" jdbcType="TINYINT" />
+		<id property="sb_name" column="sb_name" jdbcType="VARCHAR" />
+		<id property="sb_title1" column="sb_title1" jdbcType="VARCHAR" />
+		<id property="sb_title2" column="sb_title2" jdbcType="VARCHAR" />
+		<id property="sb_contents" column="sb_contents" jdbcType="VARCHAR" />
+		<id property="sb_features" column="sb_features" jdbcType="VARCHAR" />
+		<id property="sb_policy" column="sb_policy" jdbcType="VARCHAR" />
+		<id property="sb_tel" column="sb_tel" jdbcType="VARCHAR" />
+		<id property="sb_fax" column="sb_fax" jdbcType="VARCHAR" />
+		<id property="sb_dept" column="sb_dept" jdbcType="VARCHAR" />
+		<id property="sb_zipcode" column="sb_zipcode" jdbcType="VARCHAR" />
+		<id property="sb_prefecture_id" column="sb_prefecture_id" jdbcType="VARCHAR" />
+		<id property="sb_address" column="sb_address" jdbcType="VARCHAR" />
+		<id property="sb_address1" column="sb_address1" jdbcType="VARCHAR" />
+		<id property="sb_address2" column="sb_address2" jdbcType="VARCHAR" />
+		<id property="sb_address3" column="sb_address3" jdbcType="VARCHAR" />
+		<id property="sb_address4" column="sb_address4" jdbcType="VARCHAR" />
+		<id property="sb_access" column="sb_access" jdbcType="VARCHAR" />
+		<id property="photo1_name" column="photo1_name" jdbcType="VARCHAR" />
+		<id property="photo1_size" column="photo1_size" jdbcType="BIGINT" />
+		<id property="org1_name" column="org1_name" jdbcType="VARCHAR" />
+		<id property="photo2_name" column="photo2_name" jdbcType="VARCHAR" />
+		<id property="photo2_size" column="photo2_size" jdbcType="BIGINT" />
+		<id property="org2_name" column="org2_name" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<resultMap id="branch_list" type="com.mycompany.myschool.web.entity.vo.BranchListVo">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="sb_id" column="sb_id" jdbcType="VARCHAR" />
+		<id property="sb_name" column="sb_name" jdbcType="VARCHAR" />
+		<id property="sb_type" column="sb_type" jdbcType="VARCHAR" />
+		<id property="favr_cnt" column="favr_cnt" jdbcType="INTEGER" />
+		<id property="rcmmd_cnt" column="rcmmd_cnt" jdbcType="INTEGER" />
+		<id property="rcmmd_type" column="rcmmd_type" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="columns">
+		idx,
+		sb_id,
+		school_id,
+		sb_type,
+		sb_ord,
+		sb_name,
+		sb_title1,
+		sb_title2,
+		sb_contents,
+		sb_features,
+		sb_policy,
+		sb_tel,
+		sb_fax,
+		sb_dept,
+		sb_zipcode,
+		sb_prefecture_id,
+		sb_address1,
+		sb_address2,
+		sb_address3,
+		sb_address4,
+		sb_access,
+		photo1_name,
+		photo1_size,
+		org1_name,
+		photo2_name,
+		photo2_size,
+		org2_name,
+		ins_date,
+		upd_date,
+		upd_id,
+		del_date,
+		del_flg
+	</sql>
+
+	<select id="selectMaxId" resultType="String">
+		SELECT
+			MAX(SB_ID) 
+		FROM
+			DS_SCHOOL_BRANCH_TX
+	</select>
+	
+	<select id="selectOne" parameterType="String" resultMap="customerBranch">
+		SELECT 
+			<include refid="columns"/>
+		FROM 
+			DS_SCHOOL_BRANCH_TX
+		WHERE 
+			SB_ID = #{key}
+	</select>
+	
+	<select id="selectInfo" parameterType="String" resultMap="branch_info">
+		SELECT 
+			<include refid="columns"/>
+		FROM 
+			DS_SCHOOL_BRANCH_TX
+		WHERE 
+			SB_ID = #{key}
+	</select>
+
+	<select id="selectAllForMain" parameterType="hashmap" resultMap="customerBranch">
+		SELECT B.SB_ID, B.SB_NAME
+		FROM DS_SCHOOL_BRANCH_TX B
+	    WHERE B.DEL_FLG IS NULL OR B.DEL_FLG = 0
+		ORDER BY B.IDX ASC
+		LIMIT #{pos}, 10
+	</select>
+	
+	<select id="selectAllBySchoolId" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity" resultMap="customerBranch">
+		SELECT B.IDX, B.SCHOOL_ID, B.SB_ID, B.SB_NAME, 
+		        (SELECT count(idx) FROM DS_FAVORITE_TX WHERE sb_id = B.SB_ID) as FAVR_CNT, 
+		        (SELECT count(idx) FROM DS_RCMMD_TX WHERE sb_id = B.SB_ID) as RCMMD_CNT,
+		        SB_TYPE
+		FROM DS_SCHOOL_BRANCH_TX B
+	    WHERE (B.DEL_FLG IS NULL OR B.DEL_FLG = 0) AND B.SCHOOL_ID = #{school_id}
+		ORDER BY B.IDX ASC
+	</select>
+	
+	<select id="selectAllByStudentId" parameterType="String" resultMap="customerBranch">
+		SELECT B.IDX, B.SCHOOL_ID, B.SB_NAME, 
+		        (SELECT count(idx) FROM DS_FAVORITE_TX WHERE sb_id = B.SB_ID) as FAVR_CNT, 
+		        (SELECT count(idx) FROM DS_RCMMD_TX WHERE sb_id = B.SB_ID) as RCMMD_CNT,
+		        SB_TYPE
+		FROM DS_SCHOOL_BRANCH_TX B
+	    WHERE B.SB_ID = #{sb_id}
+		ORDER BY B.IDX ASC
+	</select>
+
+	<select id="selectListVo" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity" resultMap="branch_list">
+		SELECT B.IDX, B.SB_ID, B.SB_NAME, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = B.SB_ID) as FAVR_CNT, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = B.SB_ID) as RCMMD_CNT,
+		        SB_TYPE
+		FROM DS_SCHOOL_BRANCH_TX B
+		<if test="searchValue != null">
+		    WHERE SB_NAME LIKE '%${searchValue}%'
+		</if>
+		<if test="orderType == null || orderDir == null ">
+		ORDER BY B.IDX DESC
+		</if>
+		<if test="orderType == 'SCHOOL_NAME'">
+		ORDER BY SB_NAME
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		<if test="orderType == 'S.IDX'">
+		ORDER BY B.IDX
+		    	<if test="orderDir == 'desc'">
+				 DESC
+				</if>
+				<if test="orderDir == 'asc'">
+				 ASC
+				</if>
+		</if>
+		LIMIT #{startRecord}, 10;
+	</select>
+	
+	<select id="selectCountListVo" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity" resultType="Integer">
+		SELECT COUNT(IDX) 
+		FROM DS_SCHOOL_BRANCH_TX
+		<if test="searchValue != null">
+		    WHERE SB_NAME LIKE '%${searchValue}%'
+		</if>
+		<if test="school_id != null">
+		    WHERE SCHOOL_ID = #{school_id}
+		</if>
+	</select>
+	
+	<select id="selectBranchListForStudentVo" parameterType="String" resultMap="branch_list">
+		select b.idx, b.sb_id, b.sb_name, 
+		        (select count(idx) from DS_FAVORITE_TX where sb_id = b.sb_id) as favr_cnt, 
+		        (select count(idx) from DS_RCMMD_TX where sb_id = b.sb_id) as rcmmd_cnt,
+		        sb_type
+		from DS_SCHOOL_BRANCH_TX b
+		where b.sb_id in (select sb_id from DS_RCMMD_TX where student_id=#{student_id})
+		order by b.idx desc;
+	</select>
+	
+	<select id="selectInfoVo" parameterType="String" resultMap="branch_info">
+		select b.idx, b.sb_id, b.school_id, b.sb_type, b.sb_ord, b.sb_name,
+				b.sb_title1, b.sb_title2, b.sb_contents, b.sb_features, b.sb_policy, b.sb_tel, b.sb_fax, b.sb_dept,
+				b.sb_zipcode, b.sb_address1, b.sb_address2, b.sb_address3, b.sb_address4, b.sb_access, 
+				b.photo1_name, b.photo1_size, b.org1_name,
+				b.photo2_name, b.photo2_size, b.org2_name,
+			   b.ins_date
+		from DS_SCHOOL_BRANCH_TX b
+        where b.sb_id = #{sb_id}
+	</select>
+	
+	<select id="selectForRcmmdWithSchoolKeyword" parameterType="hashmap" resultMap="branch_info">
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	SB_NAME LIKE '%${sb_name1}%' 
+		LIMIT #{sb_limit1}
+		<if test="sb_name2 != null">
+		UNION
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	SB_NAME LIKE '%${sb_name2}%' 
+		LIMIT #{sb_limit2}
+		</if>
+		<if test="sb_name3 != null">
+		UNION
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	SB_NAME LIKE '%${sb_name3}%' 
+		LIMIT #{sb_limit3}
+		</if>
+	</select>
+	
+	<select id="selectForRcmmdWithAddressKeyword" parameterType="hashmap" resultMap="branch_info">
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	SB_ZIPCODE LIKE '%${sb_zipcode1}%' 
+		ORDER BY SCHOOL_ID ASC
+		LIMIT #{sb_limit1}
+		<if test="sb_zipcode2 != null">
+		UNION
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	SB_ZIPCODE LIKE '%${sb_zipcode2}%' 
+		ORDER BY SCHOOL_ID ASC
+		LIMIT #{sb_limit2}
+		</if>
+		<if test="sb_zipcode3 != null">
+		UNION
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	SB_ZIPCODE LIKE '%${sb_zipcode3}%' 
+		ORDER BY SCHOOL_ID ASC
+		LIMIT #{sb_limit3}
+		</if>
+	</select>
+				
+	<select id="selectForRcmmdWithAddress" parameterType="hashmap" resultMap="branch_info">
+		SELECT 	SB_ID, SCHOOL_ID, SB_TYPE
+		FROM 	DS_SCHOOL_BRANCH_TX
+		WHERE	1 = 1
+			<if test="sb_zipcode != null">
+		    	AND SB_ZIPCODE = #{sb_zipcode}
+			</if>
+			<if test="sb_address3 != null">
+		    	AND SB_ADDRESS3 LIKE #{sb_address3}
+			</if>
+			<if test="sb_address2 != null">
+		    	AND SB_ADDRESS2 LIKE #{sb_address2}
+			</if>
+		ORDER BY SB_ID ASC
+		LIMIT 	10;
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity">
+		INSERT INTO DS_SCHOOL_BRANCH_TX (
+			IDX,SB_ID,SCHOOL_ID,SB_TYPE,SB_ORD,
+			SB_NAME,SB_TITLE1,SB_TITLE2,SB_CONTENTS,SB_FEATURES, SB_POLICY, 
+			SB_TEL,SB_FAX,SB_DEPT,SB_ZIPCODE,SB_PREFECTURE_ID,
+			SB_ADDRESS1,SB_ADDRESS2,SB_ADDRESS3,SB_ADDRESS4,SB_ACCESS,
+			PHOTO1_NAME,PHOTO1_SIZE,ORG1_NAME,PHOTO2_NAME,PHOTO2_SIZE,
+			ORG2_NAME,INS_DATE
+		) VALUES (
+			#{idx},#{sb_id},#{school_id},#{sb_type},#{sb_ord},
+			#{sb_name},#{sb_title1},#{sb_title2},#{sb_contents},#{sb_features},#{sb_policy},
+			#{sb_tel},#{sb_fax},#{sb_dept},#{sb_zipcode},#{sb_prefecture_id},
+			#{sb_address1},#{sb_address2},#{sb_address3},#{sb_address4},#{sb_access},
+			#{photo1_name},#{photo1_size},#{org1_name},#{photo2_name},#{photo2_size},
+			#{org2_name},NOW()
+		)
+	</insert>
+
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity">
+		UPDATE DS_SCHOOL_BRANCH_TX  SET 
+			SB_TYPE=#{sb_type},
+			SB_ORD=#{sb_ord},
+			SB_NAME=#{sb_name},
+			SB_TITLE1=#{sb_title1},
+			SB_TITLE2=#{sb_title2},
+			SB_FEATURES=#{sb_features},
+			SB_POLICY=#{sb_policy},
+			SB_TEL=#{sb_tel},
+			SB_FAX=#{sb_fax},
+			SB_DEPT=#{sb_dept},
+			SB_ZIPCODE=#{sb_zipcode},
+			SB_PREFECTURE_ID=#{sb_prefecture_id},
+			SB_ADDRESS1=#{sb_address1},
+			SB_ADDRESS2=#{sb_address2},
+			SB_ADDRESS3=#{sb_address3},
+			SB_ADDRESS4=#{sb_address4},
+			SB_ACCESS=#{sb_access},
+			UPD_DATE=NOW(),
+			UPD_ID=#{upd_id}
+		WHERE 
+			SB_ID=#{sb_id}
+	</update>
+
+	<update id="updateForDelete" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity">
+		UPDATE DS_SCHOOL_BRANCH_TX SET DEL_FLG = 1, DEL_DATE = NOW()
+		WHERE 
+			SB_ID IN (
+				<foreach collection="sbIdArray" item="sb_id" separator=",">#{sb_id}</foreach>
+			)
+	</update>
+	
+	<delete id="delete" parameterType="com.mycompany.myschool.web.entity.customer.CustomerBranchEntity">
+		DELETE FROM DS_SCHOOL_BRANCH_TX 
+		WHERE 
+			SB_ID=#{sb_id}
+	</delete>
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.customer.CustomerSub2Mapper">
+
+	<resultMap id="school_charger" type="com.mycompany.myschool.web.entity.customer.CustomerSub2Entity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="school_id" column="school_id" jdbcType="VARCHAR" />
+		<id property="chr_fname" column="chr_fname" jdbcType="VARCHAR" />
+		<id property="chr_lname" column="chr_lname" jdbcType="VARCHAR" />
+		<id property="chr_dept" column="chr_dept" jdbcType="VARCHAR" />
+		<id property="chr_tel" column="chr_tel" jdbcType="VARCHAR" />
+		<id property="chr_fax" column="chr_fax" jdbcType="VARCHAR" />
+		<id property="chr_fb" column="chr_fb" jdbcType="VARCHAR" />
+		<id property="chr_tw" column="chr_tw" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+		<id property="upd_id" column="upd_id" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		school_id,
+		chr_fname,
+		chr_lname,
+		chr_dept,
+		chr_tel,
+		chr_fax,
+		chr_fb,
+		chr_tw,
+		ins_date,
+		upd_date,
+		upd_id
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub2Entity" resultMap="school_charger">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_SUB2_TX
+		WHERE 
+			1 = 1
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+			<if test="chr_fname != null and chr_fname != ''">
+				AND chr_fname = #{chr_fname}
+			</if>
+			<if test="chr_lname != null and chr_lname != ''">
+				AND chr_lname = #{chr_lname}
+			</if>
+			<if test="chr_fb != null and chr_fb != ''">
+				AND chr_fb = #{chr_fb}
+			</if>
+			<if test="chr_tw != null and chr_tw != ''">
+				AND chr_tw = #{chr_tw}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub2Entity" resultMap="school_charger">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_SUB2_TX
+		WHERE 
+			1 = 1
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+			<if test="chr_fname != null and chr_fname != ''">
+				AND chr_fname = #{chr_fname}
+			</if>
+			<if test="chr_lname != null and chr_lname != ''">
+				AND chr_lname = #{chr_lname}
+			</if>
+			<if test="chr_fb != null and chr_fb != ''">
+				AND chr_fb = #{chr_fb}
+			</if>
+			<if test="chr_tw != null and chr_tw != ''">
+				AND chr_tw = #{chr_tw}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectBySchoolId" parameterType="String" resultMap="school_charger">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_SCHOOL_SUB2_TX
+		WHERE 
+			school_id = #{school_id}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub2Entity">
+	    INSERT INTO DS_SCHOOL_SUB2_TX 
+	    ( school_id, chr_fname, chr_lname, chr_dept, chr_tel, chr_fax, chr_fb, chr_tw, ins_date )
+	    VALUES
+	    ( #{school_id, jdbcType=VARCHAR},
+	    	#{chr_fname, jdbcType=VARCHAR},
+	    	#{chr_lname, jdbcType=VARCHAR},
+	    	#{chr_dept, jdbcType=VARCHAR},
+	    	#{chr_tel, jdbcType=VARCHAR},
+	    	#{chr_fax, jdbcType=VARCHAR},
+	    	#{chr_fb, jdbcType=VARCHAR},
+	    	#{chr_tw, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub2Entity">
+		UPDATE DS_SCHOOL_SUB2_TX SET 
+			chr_fname=#{chr_fname, jdbcType=VARCHAR},
+	    	chr_lname=#{chr_lname, jdbcType=VARCHAR},
+	    	chr_dept=#{chr_dept, jdbcType=VARCHAR},
+	    	chr_tel=#{chr_tel, jdbcType=VARCHAR},
+	    	chr_fax=#{chr_fax, jdbcType=VARCHAR},
+	    	chr_fb=#{chr_fb, jdbcType=VARCHAR},
+	    	chr_tw=#{chr_tw, jdbcType=VARCHAR},
+	    	upd_id=#{upd_id, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		DELETE FROM DS_SCHOOL_SUB2_TX 
+		WHERE 
+			school_id=#{school_id, jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.customer.CustomerSub2Entity">
+		DELETE FROM DS_SCHOOL_SUB2_TX 
+		WHERE 
+			1 = 1
+			<if test="school_id != null and school_id != ''">
+				AND school_id = #{school_id}
+			</if>
+	</delete>
+</mapper>

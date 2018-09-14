@@ -1,0 +1,19 @@
+{"nodes": 
+	{"Elementary school": {"borders": 1, "length": 1}, 
+	 "Middle school": {"borders": 1, "length": 1},
+	 "A High school": {"borders": 1, "length": 2, "link": "www.naver.com", "region": "South America"},
+	 "B High school": {"borders": 1, "length": 2, "link": "www.naver.com", "region": "South America"},
+	 "C High school": {"borders": 1, "length": 2, "link": "www.naver.com", "region": "South America"},
+	 "Me": {"borders": 1, "length": 1, "region": "South America"}
+	}, 
+ "edges": 
+ 	{"Middle school": {"Elementary school": {}}, 
+ 	 "Me": {
+ 	  			     "Middle school": {},
+ 	  			     "A High school": {},
+ 	  			     "B High school": {},
+ 	  			     "C High school": {}
+ 	  			     } 	  			     
+	}
+}
+

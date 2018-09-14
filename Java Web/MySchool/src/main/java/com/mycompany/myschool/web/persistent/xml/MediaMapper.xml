@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//END" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.myschool.web.persistent.mapper.sns.MediaMapper">
+
+	<resultMap id="media" type="com.mycompany.myschool.web.entity.sns.MediaEntity">
+		<id property="idx" column="idx" jdbcType="INTEGER" />
+		<id property="board_id" column="board_id" jdbcType="VARCHAR" />
+		<id property="media_type" column="media_type" jdbcType="INTEGER" />
+		<id property="url" column="url" jdbcType="VARCHAR" />
+		<id property="ins_date" column="ins_date" jdbcType="TIMESTAMP" />
+		<id property="upd_date" column="upd_date" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="columns">
+		idx,
+		brd_idx,
+		board_id,
+		media_type,
+		url,
+		ins_date,
+		upd_date	
+	</sql>
+	
+	<select id="select" parameterType="com.mycompany.myschool.web.entity.sns.MediaEntity" resultMap="media">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_MEDIA_TX
+		WHERE 
+			(IDX > 0) 
+			<if test="media_type != null and media_type != ''">
+				AND media_type = #{media_type}
+			</if>
+		ORDER BY IDX DESC 
+	</select>
+	
+	<select id="selectOne" parameterType="com.mycompany.myschool.web.entity.sns.MediaEntity" resultMap="media">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_MEDIA_TX
+		WHERE 
+			idx = #{idx}
+	</select>
+	
+	<select id="selectByBoard" parameterType="String" resultMap="media">
+		SELECT
+			<include refid="columns"/>
+		FROM
+			DS_MEDIA_TX
+		WHERE
+			board_id = #{board_id, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="insert" parameterType="com.mycompany.myschool.web.entity.sns.MediaEntity">
+	    INSERT INTO DS_MEDIA_TX 
+	    ( board_id, media_type, url, ins_date )
+	    VALUES
+	    ( #{board_id, jdbcType=VARCHAR},
+	    	#{media_type, jdbcType=VARCHAR},
+	    	#{url, jdbcType=VARCHAR},
+	    	NOW()
+	    )
+	</insert>
+	
+	<update id="update" parameterType="com.mycompany.myschool.web.entity.sns.MediaEntity">
+		UPDATE DS_MEDIA_TX SET 
+			media_type=#{media_type, jdbcType=VARCHAR},
+			url=#{url, jdbcType=VARCHAR},
+	    	upd_date=NOW()
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM DS_MEDIA_TX 
+		WHERE 
+			idx=#{idx, jdbcType=INTEGER}
+	</delete>
+	
+	<delete id="deleteList" parameterType="com.mycompany.myschool.web.entity.sns.MediaEntity">
+		DELETE FROM DS_MEDIA_TX 
+		WHERE 
+			(IDX > 0) 
+			<if test="board_id != null and board_id != ''">
+				AND board_id = #{board_id}
+			</if>
+	</delete>
+</mapper>
